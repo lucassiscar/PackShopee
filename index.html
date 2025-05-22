@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <script>
+    if(navigator.userAgent.match(/MSIE|Internet Explorer/i)||navigator.userAgent.match(/Trident\/7\..*?rv:11/i)){var href=document.location.href;if(!href.match(/[?&]nowprocket/)){if(href.indexOf("?")==-1){if(href.indexOf("#")==-1){document.location.href=href+"?nowprocket=1"}else{document.location.href=href.replace("#","?nowprocket=1#")}}else{if(href.indexOf("#")==-1){document.location.href=href+"&nowprocket=1"}else{document.location.href=href.replace("#","&nowprocket=1#")}}}}
+    </script>
+    <script>
+    class RocketLazyLoadScripts{constructor(){this.v="1.2.4",this.triggerEvents=["keydown","mousedown","mousemove","touchmove","touchstart","touchend","wheel"],this.userEventHandler=this._triggerListener.bind(this),this.touchStartHandler=this._onTouchStart.bind(this),this.touchMoveHandler=this._onTouchMove.bind(this),this.touchEndHandler=this._onTouchEnd.bind(this),this.clickHandler=this._onClick.bind(this),this.interceptedClicks=[],window.addEventListener("pageshow",t=>{this.persisted=t.persisted}),window.addEventListener("DOMContentLoaded",()=>{this._preconnect3rdParties()}),this.delayedScripts={normal:[],async:[],defer:[]},this.trash=[],this.allJQueries=[]}_addUserInteractionListener(t){if(document.hidden){t._triggerListener();return}this.triggerEvents.forEach(e=>window.addEventListener(e,t.userEventHandler,{passive:!0})),window.addEventListener("touchstart",t.touchStartHandler,{passive:!0}),window.addEventListener("mousedown",t.touchStartHandler),document.addEventListener("visibilitychange",t.userEventHandler)}_removeUserInteractionListener(){this.triggerEvents.forEach(t=>window.removeEventListener(t,this.userEventHandler,{passive:!0})),document.removeEventListener("visibilitychange",this.userEventHandler)}_onTouchStart(t){"HTML"!==t.target.tagName&&(window.addEventListener("touchend",this.touchEndHandler),window.addEventListener("mouseup",this.touchEndHandler),window.addEventListener("touchmove",this.touchMoveHandler,{passive:!0}),window.addEventListener("mousemove",this.touchMoveHandler),t.target.addEventListener("click",this.clickHandler),this._renameDOMAttribute(t.target,"onclick","rocket-onclick"),this._pendingClickStarted())}_onTouchMove(t){window.removeEventListener("touchend",this.touchEndHandler),window.removeEventListener("mouseup",this.touchEndHandler),window.removeEventListener("touchmove",this.touchMoveHandler,{passive:!0}),window.removeEventListener("mousemove",this.touchMoveHandler),t.target.removeEventListener("click",this.clickHandler),this._renameDOMAttribute(t.target,"rocket-onclick","onclick"),this._pendingClickFinished()}_onTouchEnd(){window.removeEventListener("touchend",this.touchEndHandler),window.removeEventListener("mouseup",this.touchEndHandler),window.removeEventListener("touchmove",this.touchMoveHandler,{passive:!0}),window.removeEventListener("mousemove",this.touchMoveHandler)}_onClick(t){t.target.removeEventListener("click",this.clickHandler),this._renameDOMAttribute(t.target,"rocket-onclick","onclick"),this.interceptedClicks.push(t),t.preventDefault(),t.stopPropagation(),t.stopImmediatePropagation(),this._pendingClickFinished()}_replayClicks(){window.removeEventListener("touchstart",this.touchStartHandler,{passive:!0}),window.removeEventListener("mousedown",this.touchStartHandler),this.interceptedClicks.forEach(t=>{t.target.dispatchEvent(new MouseEvent("click",{view:t.view,bubbles:!0,cancelable:!0}))})}_waitForPendingClicks(){return new Promise(t=>{this._isClickPending?this._pendingClickFinished=t:t()})}_pendingClickStarted(){this._isClickPending=!0}_pendingClickFinished(){this._isClickPending=!1}_renameDOMAttribute(t,e,r){t.hasAttribute&&t.hasAttribute(e)&&(event.target.setAttribute(r,event.target.getAttribute(e)),event.target.removeAttribute(e))}_triggerListener(){this._removeUserInteractionListener(this),"loading"===document.readyState?document.addEventListener("DOMContentLoaded",this._loadEverythingNow.bind(this)):this._loadEverythingNow()}_preconnect3rdParties(){let t=[];document.querySelectorAll("script[type=rocketlazyloadscript][data-rocket-src]").forEach(e=>{let r=e.getAttribute("data-rocket-src");if(r&&0!==r.indexOf("data:")){0===r.indexOf("//")&&(r=location.protocol+r);try{let i=new URL(r).origin;i!==location.origin&&t.push({src:i,crossOrigin:e.crossOrigin||"module"===e.getAttribute("data-rocket-type")})}catch(n){}}}),t=[...new Map(t.map(t=>[JSON.stringify(t),t])).values()],this._batchInjectResourceHints(t,"preconnect")}async _loadEverythingNow(){this.lastBreath=Date.now(),this._delayEventListeners(),this._delayJQueryReady(this),this._handleDocumentWrite(),this._registerAllDelayedScripts(),this._preloadAllScripts(),await this._loadScriptsFromList(this.delayedScripts.normal),await this._loadScriptsFromList(this.delayedScripts.defer),await this._loadScriptsFromList(this.delayedScripts.async);try{await this._triggerDOMContentLoaded(),await this._pendingWebpackRequests(this),await this._triggerWindowLoad()}catch(t){console.error(t)}window.dispatchEvent(new Event("rocket-allScriptsLoaded")),this._waitForPendingClicks().then(()=>{this._replayClicks()}),this._emptyTrash()}_registerAllDelayedScripts(){document.querySelectorAll("script[type=rocketlazyloadscript]").forEach(t=>{t.hasAttribute("data-rocket-src")?t.hasAttribute("async")&&!1!==t.async?this.delayedScripts.async.push(t):t.hasAttribute("defer")&&!1!==t.defer||"module"===t.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(t):this.delayedScripts.normal.push(t):this.delayedScripts.normal.push(t)})}async _transformScript(t){if(await this._littleBreath(),!0===t.noModule&&"noModule"in HTMLScriptElement.prototype){t.setAttribute("data-rocket-status","skipped");return}return new Promise(navigator.userAgent.indexOf("Firefox/")>0||""===navigator.vendor?e=>{let r=document.createElement("script");[...t.attributes].forEach(t=>{let e=t.nodeName;"type"!==e&&("data-rocket-type"===e&&(e="type"),"data-rocket-src"===e&&(e="src"),r.setAttribute(e,t.nodeValue))}),t.text&&(r.text=t.text),r.hasAttribute("src")?(r.addEventListener("load",e),r.addEventListener("error",e)):(r.text=t.text,e());try{t.parentNode.replaceChild(r,t)}catch(i){e()}}:e=>{function r(){t.setAttribute("data-rocket-status","failed"),e()}try{let i=t.getAttribute("data-rocket-type"),n=t.getAttribute("data-rocket-src");i?(t.type=i,t.removeAttribute("data-rocket-type")):t.removeAttribute("type"),t.addEventListener("load",function r(){t.setAttribute("data-rocket-status","executed"),e()}),t.addEventListener("error",r),n?(t.removeAttribute("data-rocket-src"),t.src=n):t.src="data:text/javascript;base64,"+window.btoa(unescape(encodeURIComponent(t.text)))}catch(s){r()}})}async _loadScriptsFromList(t){let e=t.shift();return e&&e.isConnected?(await this._transformScript(e),this._loadScriptsFromList(t)):Promise.resolve()}_preloadAllScripts(){this._batchInjectResourceHints([...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async],"preload")}_batchInjectResourceHints(t,e){var r=document.createDocumentFragment();t.forEach(t=>{let i=t.getAttribute&&t.getAttribute("data-rocket-src")||t.src;if(i){let n=document.createElement("link");n.href=i,n.rel=e,"preconnect"!==e&&(n.as="script"),t.getAttribute&&"module"===t.getAttribute("data-rocket-type")&&(n.crossOrigin=!0),t.crossOrigin&&(n.crossOrigin=t.crossOrigin),t.integrity&&(n.integrity=t.integrity),r.appendChild(n),this.trash.push(n)}}),document.head.appendChild(r)}_delayEventListeners(){let t={};function e(e,r){!function e(r){!t[r]&&(t[r]={originalFunctions:{add:r.addEventListener,remove:r.removeEventListener},eventsToRewrite:[]},r.addEventListener=function(){arguments[0]=i(arguments[0]),t[r].originalFunctions.add.apply(r,arguments)},r.removeEventListener=function(){arguments[0]=i(arguments[0]),t[r].originalFunctions.remove.apply(r,arguments)});function i(e){return t[r].eventsToRewrite.indexOf(e)>=0?"rocket-"+e:e}}(e),t[e].eventsToRewrite.push(r)}function r(t,e){let r=t[e];Object.defineProperty(t,e,{get:()=>r||function(){},set(i){t["rocket"+e]=r=i}})}e(document,"DOMContentLoaded"),e(window,"DOMContentLoaded"),e(window,"load"),e(window,"pageshow"),e(document,"readystatechange"),r(document,"onreadystatechange"),r(window,"onload"),r(window,"onpageshow")}_delayJQueryReady(t){let e;function r(t){return t.split(" ").map(t=>"load"===t||0===t.indexOf("load.")?"rocket-jquery-load":t).join(" ")}function i(i){if(i&&i.fn&&!t.allJQueries.includes(i)){i.fn.ready=i.fn.init.prototype.ready=function(e){return t.domReadyFired?e.bind(document)(i):document.addEventListener("rocket-DOMContentLoaded",()=>e.bind(document)(i)),i([])};let n=i.fn.on;i.fn.on=i.fn.init.prototype.on=function(){return this[0]===window&&("string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=r(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach(t=>{let e=arguments[0][t];delete arguments[0][t],arguments[0][r(t)]=e})),n.apply(this,arguments),this},t.allJQueries.push(i)}e=i}i(window.jQuery),Object.defineProperty(window,"jQuery",{get:()=>e,set(t){i(t)}})}async _pendingWebpackRequests(t){let e=document.querySelector("script[data-webpack]");async function r(){return new Promise(t=>{e.addEventListener("load",t),e.addEventListener("error",t)})}e&&(await r(),await t._requestAnimFrame(),await t._pendingWebpackRequests(t))}async _triggerDOMContentLoaded(){this.domReadyFired=!0,await this._littleBreath(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._littleBreath(),window.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._littleBreath(),document.dispatchEvent(new Event("rocket-readystatechange")),await this._littleBreath(),document.rocketonreadystatechange&&document.rocketonreadystatechange()}async _triggerWindowLoad(){await this._littleBreath(),window.dispatchEvent(new Event("rocket-load")),await this._littleBreath(),window.rocketonload&&window.rocketonload(),await this._littleBreath(),this.allJQueries.forEach(t=>t(window).trigger("rocket-jquery-load")),await this._littleBreath();let t=new Event("rocket-pageshow");t.persisted=this.persisted,window.dispatchEvent(t),await this._littleBreath(),window.rocketonpageshow&&window.rocketonpageshow({persisted:this.persisted})}_handleDocumentWrite(){let t=new Map;document.write=document.writeln=function(e){let r=document.currentScript;r||console.error("WPRocket unable to document.write this: "+e);let i=document.createRange(),n=r.parentElement,s=t.get(r);void 0===s&&(s=r.nextSibling,t.set(r,s));let a=document.createDocumentFragment();i.setStart(a,0),a.appendChild(i.createContextualFragment(e)),n.insertBefore(a,s)}}async _littleBreath(){Date.now()-this.lastBreath>45&&(await this._requestAnimFrame(),this.lastBreath=Date.now())}async _requestAnimFrame(){return document.hidden?new Promise(t=>setTimeout(t)):new Promise(t=>requestAnimationFrame(t))}_emptyTrash(){this.trash.forEach(t=>t.remove())}static run(){let t=new RocketLazyLoadScripts;t._addUserInteractionListener(t)}}RocketLazyLoadScripts.run();
+    </script>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <style>
+    img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }
+    </style><!-- This site is optimized with the Yoast SEO plugin v25.1 - https://yoast.com/wordpress/plugins/seo/ -->
+    <title>
+      Vídeos Virais Narrados + Capas Prontas - Site
+    </title>
+    <link rel="canonical" href="https://jaquelinecosta.com.br/videosnarrados/">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Vídeos Virais Narrados + Capas Prontas - Site">
+    <meta property="og:description" content="DESCUBRA O SEGREDO DOS PERFIS DE ACHADINHOS! Vídeos Virais Narrados + Capas Prontas para impulsionar suas vendas de forma mais rápida! Acesso Vitalício Pagamento Único COMPRAR AGORA É para você que… Está cansada de ter um perfil de achados sem graça; Quer deixar o perfil mais atrativo em poucos cliques; Ganhar mais seguidores e visibilidade […]">
+    <meta property="og:url" content="https://jaquelinecosta.com.br/videosnarrados/">
+    <meta property="og:site_name" content="Site">
+    <meta property="article:modified_time" content="2025-05-13T00:59:28+00:00">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:label1" content="Est. tempo de leitura">
+    <meta name="twitter:data1" content="8 minutos">
+    <script type="application/ld+json" class="yoast-schema-graph">
+    {"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://jaquelinecosta.com.br/videosnarrados/","url":"https://jaquelinecosta.com.br/videosnarrados/","name":"Vídeos Virais Narrados + Capas Prontas - Site","isPartOf":{"@id":"https://jaquelinecosta.com.br/#website"},"primaryImageOfPage":{"@id":"https://jaquelinecosta.com.br/videosnarrados/#primaryimage"},"image":{"@id":"https://jaquelinecosta.com.br/videosnarrados/#primaryimage"},"thumbnailUrl":"https://jaquelinecosta.com.br/wp-content/uploads/2025/02/Logo.svg","datePublished":"2025-05-13T00:57:07+00:00","dateModified":"2025-05-13T00:59:28+00:00","breadcrumb":{"@id":"https://jaquelinecosta.com.br/videosnarrados/#breadcrumb"},"inLanguage":"pt-BR","potentialAction":[{"@type":"ReadAction","target":["https://jaquelinecosta.com.br/videosnarrados/"]}]},{"@type":"ImageObject","inLanguage":"pt-BR","@id":"https://jaquelinecosta.com.br/videosnarrados/#primaryimage","url":"https://jaquelinecosta.com.br/wp-content/uploads/2025/02/Logo.svg","contentUrl":"https://jaquelinecosta.com.br/wp-content/uploads/2025/02/Logo.svg","width":548,"height":127},{"@type":"BreadcrumbList","@id":"https://jaquelinecosta.com.br/videosnarrados/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://jaquelinecosta.com.br/"},{"@type":"ListItem","position":2,"name":"Vídeos Virais Narrados + Capas Prontas"}]},{"@type":"WebSite","@id":"https://jaquelinecosta.com.br/#website","url":"https://jaquelinecosta.com.br/","name":"Site","description":"","potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://jaquelinecosta.com.br/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"pt-BR"}]}
+    </script><!-- / Yoast SEO plugin. -->
+    <link rel="alternate" type="application/rss+xml" title="Feed para Site »" href="https://jaquelinecosta.com.br/feed/">
+    <link rel="alternate" type="application/rss+xml" title="Feed de comentários para Site »" href="https://jaquelinecosta.com.br/comments/feed/">
+    <style id="wp-emoji-styles-inline-css">
+
+        img.wp-smiley, img.emoji {
+                display: inline !important;
+                border: none !important;
+                box-shadow: none !important;
+                height: 1em !important;
+                width: 1em !important;
+                margin: 0 0.07em !important;
+                vertical-align: -0.1em !important;
+                background: none !important;
+                padding: 0 !important;
+        }
+    </style>
+    <style id="classic-theme-styles-inline-css">
+    /*! This file is auto-generated */
+    .wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+    </style>
+    <style id="global-styles-inline-css">
+    :root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+    :where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+    :where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+    :root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+    </style>
+    <link rel="stylesheet" id="hello-elementor-css" href="https://jaquelinecosta.com.br/wp-content/themes/hello-elementor/style.min.css?ver=3.1.0" media="all">
+    <link rel="stylesheet" id="hello-elementor-theme-style-css" href="https://jaquelinecosta.com.br/wp-content/themes/hello-elementor/theme.min.css?ver=3.1.0" media="all">
+    <link rel="stylesheet" id="hello-elementor-header-footer-css" href="https://jaquelinecosta.com.br/wp-content/themes/hello-elementor/header-footer.min.css?ver=3.1.0" media="all">
+    <link rel="stylesheet" id="elementor-frontend-css" href="https://jaquelinecosta.com.br/wp-content/uploads/elementor/css/custom-frontend.min.css?ver=1747772209" media="all">
+    <link rel="stylesheet" id="elementor-post-36-css" href="https://jaquelinecosta.com.br/wp-content/uploads/elementor/css/post-36.css?ver=1747772209" media="all">
+    <link data-minify="1" rel="stylesheet" id="font-awesome-5-all-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/plugins/elementor/assets/lib/font-awesome/css/all.min.css?ver=1747772210" media="all">
+    <link rel="stylesheet" id="font-awesome-4-shim-css" href="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min.css?ver=3.29.0" media="all">
+    <link rel="stylesheet" id="widget-heading-css" href="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/css/widget-heading.min.css?ver=3.29.0" media="all">
+    <link rel="stylesheet" id="widget-image-box-css" href="https://jaquelinecosta.com.br/wp-content/uploads/elementor/css/custom-widget-image-box.min.css?ver=1747772209" media="all">
+    <link rel="stylesheet" id="widget-icon-list-css" href="https://jaquelinecosta.com.br/wp-content/uploads/elementor/css/custom-widget-icon-list.min.css?ver=1747772209" media="all">
+    <link rel="stylesheet" id="widget-image-css" href="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/css/widget-image.min.css?ver=3.29.0" media="all">
+    <link data-minify="1" rel="stylesheet" id="swiper-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min.css?ver=1747772211" media="all">
+    <link rel="stylesheet" id="e-swiper-css" href="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/css/conditionals/e-swiper.min.css?ver=3.29.0" media="all">
+    <link rel="stylesheet" id="widget-image-carousel-css" href="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/css/widget-image-carousel.min.css?ver=3.29.0" media="all">
+    <link rel="stylesheet" id="e-motion-fx-css" href="https://jaquelinecosta.com.br/wp-content/plugins/pro-elements/assets/css/modules/motion-fx.min.css?ver=3.27.4" media="all">
+    <link rel="stylesheet" id="widget-progress-css" href="https://jaquelinecosta.com.br/wp-content/uploads/elementor/css/custom-widget-progress.min.css?ver=1747772209" media="all">
+    <link rel="stylesheet" id="widget-nested-accordion-css" href="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/css/widget-nested-accordion.min.css?ver=3.29.0" media="all">
+    <link rel="stylesheet" id="elementor-post-944-css" href="https://jaquelinecosta.com.br/wp-content/uploads/elementor/css/post-944.css?ver=1747772538" media="all">
+    <style id="rocket-lazyload-inline-css">
+    .rll-youtube-player{position:relative;padding-bottom:56.23%;height:0;overflow:hidden;max-width:100%;}.rll-youtube-player:focus-within{outline: 2px solid currentColor;outline-offset: 5px;}.rll-youtube-player iframe{position:absolute;top:0;left:0;width:100%;height:100%;z-index:100;background:0 0}.rll-youtube-player img{bottom:0;display:block;left:0;margin:auto;max-width:100%;width:100%;position:absolute;right:0;top:0;border:none;height:auto;-webkit-transition:.4s all;-moz-transition:.4s all;transition:.4s all}.rll-youtube-player img:hover{-webkit-filter:brightness(75%)}.rll-youtube-player .play{height:100%;width:100%;left:0;top:0;position:absolute;background:url(https://jaquelinecosta.com.br/wp-content/plugins/wp-rocket/assets/img/youtube.png) no-repeat center;background-color: transparent !important;cursor:pointer;border:none;}
+    </style>
+    <link data-minify="1" rel="stylesheet" id="elementor-gf-local-raleway-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/uploads/elementor/google-fonts/css/raleway.css?ver=1747772211" media="all">
+    <link data-minify="1" rel="stylesheet" id="elementor-gf-local-poppins-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/uploads/elementor/google-fonts/css/poppins.css?ver=1747772211" media="all">
+    <link data-minify="1" rel="stylesheet" id="elementor-gf-local-sora-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/uploads/elementor/google-fonts/css/sora.css?ver=1747772211" media="all">
+    <link data-minify="1" rel="stylesheet" id="elementor-gf-local-merriweather-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/uploads/elementor/google-fonts/css/merriweather.css?ver=1747772211" media="all">
+    <link data-minify="1" rel="stylesheet" id="elementor-gf-local-instrumentsans-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/uploads/elementor/google-fonts/css/instrumentsans.css?ver=1747772211" media="all">
+    <link data-minify="1" rel="stylesheet" id="elementor-gf-local-inter-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/uploads/elementor/google-fonts/css/inter.css?ver=1747772211" media="all">
+    <link data-minify="1" rel="stylesheet" id="elementor-gf-local-spacegrotesk-css" href="https://jaquelinecosta.com.br/wp-content/cache/min/1/wp-content/uploads/elementor/google-fonts/css/spacegrotesk.css?ver=1747772211" media="all">
+    <script id="font-awesome-4-shim-js" defer src="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/lib/font-awesome/js/v4-shims.min.js?ver=3.29.0" data-rocket-status="executed"></script>
+    <script src="https://jaquelinecosta.com.br/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js" defer></script>
+    <script src="https://jaquelinecosta.com.br/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1" id="jquery-migrate-js" defer></script>
+    <link rel="https://api.w.org/" href="https://jaquelinecosta.com.br/wp-json/">
+    <link rel="alternate" title="JSON" type="application/json" href="https://jaquelinecosta.com.br/wp-json/wp/v2/pages/944">
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://jaquelinecosta.com.br/xmlrpc.php?rsd">
+    <meta name="generator" content="WordPress 6.8.1">
+    <link rel="shortlink" href="https://jaquelinecosta.com.br/?p=944">
+    <link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://jaquelinecosta.com.br/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fjaquelinecosta.com.br%2Fvideosnarrados%2F">
+    <link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://jaquelinecosta.com.br/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fjaquelinecosta.com.br%2Fvideosnarrados%2F&amp;format=xml">
+    <meta name="generator" content="Elementor 3.29.0; features: e_font_icon_svg, additional_custom_breakpoints, e_local_google_fonts, e_element_cache; settings: css_print_method-external, google_font-enabled, font_display-swap">
+    <link href="link-aqui" rel="preload" as="image" importance="high">
+    <link href="https://connect.facebook.net/en_US/fbevents.js" rel="preload" as="script" importance="high">
+    <link rel="preload" href="PRÉ CARREGUE A FONTE AQUI" as="font" type="font/woff" crossorigin="">
+    <link rel="preload" href="PRÉ CARREGUE A FONTE AQUI" as="font" type="font/woff2" crossorigin="">
+    <script src="data:text/javascript;base64,CiAgICAvLyBEZXNhYmlsaXRhciBjbGlxdWUgZG8gYm90w6NvIGRpcmVpdG8KICAgIGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ2NvbnRleHRtZW51JywgZnVuY3Rpb24oZSkgewogICAgICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgIH0sIGZhbHNlKTsKCiAgICAvLyBEZXNhYmlsaXRhciBzZWxlw6fDo28gZGUgdGV4dG8KICAgIGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ2tleWRvd24nLCBmdW5jdGlvbihlKSB7CiAgICAgICAgaWYgKGUuY3RybEtleSAmJiAoZS5rZXlDb2RlID09PSA2NyB8fCBlLmtleUNvZGUgPT09IDg2IHx8IGUua2V5Q29kZSA9PT0gODUgfHwgZS5rZXlDb2RlID09PSAxMTcpKSB7CiAgICAgICAgICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgICAgICB9CiAgICB9LCBmYWxzZSk7CgogICAgZG9jdW1lbnQub25zZWxlY3RzdGFydCA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiBmYWxzZTsKICAgIH07CgogICAgZG9jdW1lbnQub25tb3VzZWRvd24gPSBmdW5jdGlvbihlKSB7CiAgICAgICAgaWYgKGUuYnV0dG9uID09PSAyKSB7CiAgICAgICAgICAgIHJldHVybiBmYWxzZTsKICAgICAgICB9CiAgICB9Owo=" data-rocket-status="executed">
+    // Desabilitar clique do botão direito
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    }, false);
+
+    // Desabilitar seleção de texto
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 85 || e.keyCode === 117)) {
+            e.preventDefault();
+        }
+    }, false);
+
+    document.onselectstart = function() {
+        return false;
+    };
+
+    document.onmousedown = function(e) {
+        if (e.button === 2) {
+            return false;
+        }
+    };
+    </script>
+    <style>
+                                .e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),
+                                .e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) * {
+                                        background-image: none !important;
+                                }
+                                @media screen and (max-height: 1024px) {
+                                        .e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload),
+                                        .e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload) * {
+                                                background-image: none !important;
+                                        }
+                                }
+                                @media screen and (max-height: 640px) {
+                                        .e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload),
+                                        .e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload) * {
+                                                background-image: none !important;
+                                        }
+                                }
+    </style>
+    <meta name="theme-color" content="#000000"><noscript>
+    <style id="rocket-lazyload-nojs-css">
+    .rll-youtube-player, [data-lazy-src]{display:none !important;}
+    </style></noscript>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body class="wp-singular page-template page-template-elementor_canvas page page-id-944 wp-theme-hello-elementor elementor-default elementor-template-canvas elementor-kit-36 elementor-page elementor-page-944 e--ua-blink e--ua-chrome e--ua-webkit" data-elementor-device-mode="laptop">
+    <div data-elementor-type="wp-page" data-elementor-id="944" class="elementor elementor-944" data-elementor-post-type="page">
+      <div class="elementor-element elementor-element-3d5c64ac e-con-full fixedNav e-flex e-con e-child" data-id="3d5c64ac" data-element_type="container">
+        <div class="elementor-element elementor-element-28fff982 elementor-widget elementor-widget-heading" data-id="28fff982" data-element_type="widget" data-widget_type="heading.default">
+          <div class="elementor-widget-container">
+            <p class="elementor-heading-title elementor-size-default">
+              <b>PACK PREMIUM SHOPEE DO LUCAS</b>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="elementor-element elementor-element-11420757 e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="11420757" data-element_type="container" id="glowe">
+        <div class="e-con-inner">
+          <div class="elementor-element elementor-element-10dab514 e-con-full e-flex e-con e-child" data-id="10dab514" data-element_type="container">
+            <div class="elementor-element elementor-element-46d4f093 elementor-widget__width-initial elementor-widget-mobile__width-initial elementor-position-top elementor-widget elementor-widget-image-box" data-id="46d4f093" data-element_type="widget" data-widget_type="image-box.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-image-box-wrapper">
+                  <div class="elementor-image-box-content">
+                    <h3 class="elementor-image-box-title">
+                      <span class="degrade">+ De 2.300 vídeos virais da Shopee&nbsp;</span>para impulsionar suas vendas de forma mais rápida!
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-24dd718a elementor-icon-list--layout-inline elementor-mobile-align-center elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="24dd718a" data-element_type="widget" data-widget_type="icon-list.default">
+              <div class="elementor-widget-container">
+                <ul class="elementor-icon-list-items elementor-inline-items">
+                  <li class="elementor-icon-list-item elementor-inline-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-far-clock" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm61.8-104.4l-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"></path></svg></span> <span class="elementor-icon-list-text">Acesso Vitalício</span>
+                  </li>
+                  <li class="elementor-icon-list-item elementor-inline-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span> <span class="elementor-icon-list-text">Pagamento Único</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-51ca4fd3 elementor-widget__width-initial elementor-align-left elementor-mobile-align-center elementor-widget elementor-widget-button" data-id="51ca4fd3" data-element_type="widget" data-widget_type="button.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <a class="elementor-button elementor-button-link elementor-size-sm editable-element" href="https://pay.kiwify.com.br/2SKjpVS"><span class="elementor-button-content-wrapper"><span class="elementor-button-icon"><svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" viewbox="0 0 65 65" fill="none">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M0.172036 42.4404C0.287934 46.1198 0.602012 49.2782 1.0656 51.4256C2.48648 58.0083 6.44864 61.9703 13.0294 63.389C16.3745 64.1102 22.1853 64.428 32.026 64.428C44.242 64.428 49.9508 63.973 53.434 62.7218C59.5749 60.5158 62.5943 56.1169 63.518 48.0308C63.9869 43.9265 64.1678 31.747 63.8878 23.1464C63.7393 18.5868 63.599 16.9121 63.1507 14.3514C61.888 7.13763 57.825 2.86052 50.8933 1.44782C47.4461 0.745422 41.5753 0.427978 32.026 0.427978C22.4766 0.427979 16.6058 0.745423 13.1586 1.44783C8.11637 2.47541 4.56709 5.04519 2.56526 9.11798C1.41373 11.4606 0.842137 13.7153 0.453521 17.4486C0.0682673 21.1494 -0.0810984 34.4056 0.172036 42.4404ZM4.83981 42.3673C5.12685 50.2886 5.9887 53.5649 8.43673 56.0415C10.4766 58.1053 13.3005 59.0189 19.0916 59.4888C22.348 59.7529 41.7039 59.7529 44.9603 59.4888C50.7514 59.0189 53.5754 58.1053 55.6152 56.0415C57.7344 53.8976 58.6335 51.1108 59.0844 45.2904C59.3428 41.9562 59.3428 22.9019 59.0844 19.5678C58.6341 13.7549 57.7145 10.8918 55.6384 8.83985C53.4878 6.71408 50.7327 5.8249 44.8872 5.36964C41.548 5.10964 22.5039 5.10964 19.1647 5.36964C13.2489 5.83031 10.479 6.73952 8.31937 8.9293C6.32514 10.9514 5.41783 13.7879 4.98684 19.3486C4.78529 21.9492 4.68255 38.0275 4.83981 42.3673ZM17.5935 33.5997C17.7745 33.8654 18.108 34.2204 18.335 34.3887C18.7421 34.6905 18.8807 34.6953 29.2004 34.7675L39.6533 34.8406L37.2997 36.7128C34.6545 38.8169 34.2774 39.302 34.4053 40.4367C34.5362 41.5984 35.5301 42.5135 36.661 42.5135C37.016 42.5135 37.4502 42.4376 37.6259 42.345C38.4141 41.9287 43.0561 38.0819 44.3895 36.7399C46.264 34.8533 46.7141 34.0185 46.7141 32.4291C46.7141 30.829 46.2558 29.9788 44.3851 28.1091C43.0465 26.7713 38.3961 22.9217 37.6259 22.5137C37.4502 22.4208 37.016 22.3447 36.661 22.3447C35.5301 22.3447 34.5362 23.2597 34.4053 24.4215C34.2783 25.5486 34.6523 26.0313 37.2867 28.1395L39.6331 30.0176L29.1903 30.0907C18.8808 30.1629 18.7421 30.1677 18.335 30.4695C17.6355 30.9879 17.2647 31.6666 17.2647 32.4291C17.2647 32.9014 17.3676 33.2678 17.5935 33.5997Z" fill="white"></path></svg></span> <span class="elementor-button-text">COMPRAR AGORA</span></span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="elementor-element elementor-element-5723f79f e-con-full e-flex e-con e-child" data-id="5723f79f" data-element_type="container">
+            <div class="elementor-element elementor-element-1ee67893 elementor-widget elementor-widget-image" data-id="1ee67893" data-element_type="widget" data-widget_type="image.default">
+              <div class="elementor-widget-container">
+                <img decoding="async" width="880" height="923" src="https://app.clicopy.com.br/uploads/image-1747834137839-b4d5b57e-9c76-4c16-bf6d-f7e843c08215.jpeg?v=1747834137926" class="attachment-full size-full wp-image-927 entered editable-element lazyload" alt="" data-lazy-srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Copia-de-Copia-de-Sem-nome-Story-1-e1746586441721.png 880w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Copia-de-Copia-de-Sem-nome-Story-1-e1746586441721-286x300.png 286w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Copia-de-Copia-de-Sem-nome-Story-1-e1746586441721-768x806.png 768w" data-lazy-sizes="(max-width: 880px) 100vw, 880px" data-lazy-src="https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Copia-de-Copia-de-Sem-nome-Story-1-e1746586441721.png" data-ll-status="loaded" sizes="(max-width: 880px) 100vw, 880px" srcset="https://app.clicopy.com.br/uploads/image-1747834137839-b4d5b57e-9c76-4c16-bf6d-f7e843c08215.jpeg?v=1747834137926"><noscript><img decoding="async" width="880" height="923" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Copia-de-Copia-de-Sem-nome-Story-1-e1746586441721.png" class="attachment-full size-full wp-image-927" alt="" srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Copia-de-Copia-de-Sem-nome-Story-1-e1746586441721.png 880w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Copia-de-Copia-de-Sem-nome-Story-1-e1746586441721-286x300.png 286w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Copia-de-Copia-de-Sem-nome-Story-1-e1746586441721-768x806.png 768w" sizes="(max-width: 880px) 100vw, 880px"></noscript>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="elementor-element elementor-element-4a7dfa6a e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="4a7dfa6a" data-element_type="container" id="glowd">
+        <div class="e-con-inner">
+          <div class="elementor-element elementor-element-2254e787 elementor-widget-mobile__width-initial elementor-widget__width-initial elementor-widget elementor-widget-image-box" data-id="2254e787" data-element_type="widget" data-widget_type="image-box.default">
+            <div class="elementor-widget-container">
+              <div class="elementor-image-box-wrapper">
+                <div class="elementor-image-box-content">
+                  <h3 class="elementor-image-box-title">
+                    <span style="text-wrap-mode: initial;">É para</span> <span class="degrade" style="background-color: rgb(0, 0, 0); text-wrap-mode: initial;">você que...</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="elementor-element elementor-element-4f9dbb86 e-grid e-con-full e-con e-child" data-id="4f9dbb86" data-element_type="container">
+            <div class="elementor-element elementor-element-aff8622 elementor-widget__width-initial elementor-position-left elementor-vertical-align-middle elementor-widget elementor-widget-image-box" data-id="aff8622" data-element_type="widget" data-widget_type="image-box.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-image-box-wrapper">
+                  <figure class="elementor-image-box-img">
+                    <img decoding="async" width="169" height="168" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/1.svg" class="attachment-full size-full wp-image-603 entered lazyloaded" alt="" data-lazy-src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/1.svg" data-ll-status="loaded"><noscript><img decoding="async" width="169" height="168" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/1.svg" class="attachment-full size-full wp-image-603" alt=""></noscript>
+                  </figure>
+                  <div class="elementor-image-box-content">
+                    <p class="elementor-image-box-description">
+                      Está <b>cansada(o)</b> de ter um perfil de achados <b>sem graça</b>;
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-1593d251 elementor-widget__width-initial elementor-position-left elementor-vertical-align-middle elementor-widget elementor-widget-image-box" data-id="1593d251" data-element_type="widget" data-widget_type="image-box.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-image-box-wrapper">
+                  <figure class="elementor-image-box-img">
+                    <img decoding="async" width="169" height="168" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/2.svg" class="attachment-full size-full wp-image-604 entered lazyloaded" alt="" data-lazy-src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/2.svg" data-ll-status="loaded"><noscript><img loading="lazy" decoding="async" width="169" height="168" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/2.svg" class="attachment-full size-full wp-image-604" alt=""></noscript>
+                  </figure>
+                  <div class="elementor-image-box-content">
+                    <p class="elementor-image-box-description">
+                      Quer deixar o <b>perfil mais atrativo</b> em <b>poucos cliques</b>;
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-1e581e66 elementor-widget__width-initial elementor-position-left elementor-vertical-align-middle elementor-widget elementor-widget-image-box" data-id="1e581e66" data-element_type="widget" data-widget_type="image-box.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-image-box-wrapper">
+                  <figure class="elementor-image-box-img">
+                    <img decoding="async" width="169" height="168" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/3.svg" class="attachment-full size-full wp-image-605 entered lazyloaded" alt="" data-lazy-src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/3.svg" data-ll-status="loaded"><noscript><img loading="lazy" decoding="async" width="169" height="168" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/3.svg" class="attachment-full size-full wp-image-605" alt=""></noscript>
+                  </figure>
+                  <div class="elementor-image-box-content">
+                    <p class="elementor-image-box-description">
+                      Ganhar <b>mais seguidores e visibilidade</b> no <b>seu perfil</b>;
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-2af29ebc elementor-widget__width-initial elementor-position-left elementor-vertical-align-middle elementor-widget elementor-widget-image-box" data-id="2af29ebc" data-element_type="widget" data-widget_type="image-box.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-image-box-wrapper">
+                  <figure class="elementor-image-box-img">
+                    <img decoding="async" width="168" height="168" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/4.svg" class="attachment-full size-full wp-image-606 entered lazyloaded" alt="" data-lazy-src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/4.svg" data-ll-status="loaded"><noscript><img loading="lazy" decoding="async" width="168" height="168" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/4.svg" class="attachment-full size-full wp-image-606" alt=""></noscript>
+                  </figure>
+                  <div class="elementor-image-box-content">
+                    <p class="elementor-image-box-description">
+                      <b>Vender mais</b> com o seu perfil de achados.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="elementor-element elementor-element-ffcfd48 elementor-widget__width-initial elementor-align-center elementor-mobile-align-center elementor-widget elementor-widget-button" data-id="ffcfd48" data-element_type="widget" data-widget_type="button.default">
+            <div class="elementor-widget-container">
+              <div class="elementor-button-wrapper">
+                <a class="elementor-button elementor-button-link elementor-size-sm editable-element" href="https://pay.kiwify.com.br/2SKjpVS"><span class="elementor-button-content-wrapper"><span class="elementor-button-icon"><svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" viewbox="0 0 65 65" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.172036 42.4404C0.287934 46.1198 0.602012 49.2782 1.0656 51.4256C2.48648 58.0083 6.44864 61.9703 13.0294 63.389C16.3745 64.1102 22.1853 64.428 32.026 64.428C44.242 64.428 49.9508 63.973 53.434 62.7218C59.5749 60.5158 62.5943 56.1169 63.518 48.0308C63.9869 43.9265 64.1678 31.747 63.8878 23.1464C63.7393 18.5868 63.599 16.9121 63.1507 14.3514C61.888 7.13763 57.825 2.86052 50.8933 1.44782C47.4461 0.745422 41.5753 0.427978 32.026 0.427978C22.4766 0.427979 16.6058 0.745423 13.1586 1.44783C8.11637 2.47541 4.56709 5.04519 2.56526 9.11798C1.41373 11.4606 0.842137 13.7153 0.453521 17.4486C0.0682673 21.1494 -0.0810984 34.4056 0.172036 42.4404ZM4.83981 42.3673C5.12685 50.2886 5.9887 53.5649 8.43673 56.0415C10.4766 58.1053 13.3005 59.0189 19.0916 59.4888C22.348 59.7529 41.7039 59.7529 44.9603 59.4888C50.7514 59.0189 53.5754 58.1053 55.6152 56.0415C57.7344 53.8976 58.6335 51.1108 59.0844 45.2904C59.3428 41.9562 59.3428 22.9019 59.0844 19.5678C58.6341 13.7549 57.7145 10.8918 55.6384 8.83985C53.4878 6.71408 50.7327 5.8249 44.8872 5.36964C41.548 5.10964 22.5039 5.10964 19.1647 5.36964C13.2489 5.83031 10.479 6.73952 8.31937 8.9293C6.32514 10.9514 5.41783 13.7879 4.98684 19.3486C4.78529 21.9492 4.68255 38.0275 4.83981 42.3673ZM17.5935 33.5997C17.7745 33.8654 18.108 34.2204 18.335 34.3887C18.7421 34.6905 18.8807 34.6953 29.2004 34.7675L39.6533 34.8406L37.2997 36.7128C34.6545 38.8169 34.2774 39.302 34.4053 40.4367C34.5362 41.5984 35.5301 42.5135 36.661 42.5135C37.016 42.5135 37.4502 42.4376 37.6259 42.345C38.4141 41.9287 43.0561 38.0819 44.3895 36.7399C46.264 34.8533 46.7141 34.0185 46.7141 32.4291C46.7141 30.829 46.2558 29.9788 44.3851 28.1091C43.0465 26.7713 38.3961 22.9217 37.6259 22.5137C37.4502 22.4208 37.016 22.3447 36.661 22.3447C35.5301 22.3447 34.5362 23.2597 34.4053 24.4215C34.2783 25.5486 34.6523 26.0313 37.2867 28.1395L39.6331 30.0176L29.1903 30.0907C18.8808 30.1629 18.7421 30.1677 18.335 30.4695C17.6355 30.9879 17.2647 31.6666 17.2647 32.4291C17.2647 32.9014 17.3676 33.2678 17.5935 33.5997Z" fill="white"></path></svg></span> <span class="elementor-button-text">COMPRAR AGORA</span></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="elementor-element elementor-element-3ddd3de4 e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="3ddd3de4" data-element_type="container">
+        <div class="e-con-inner">
+          <div class="elementor-element elementor-element-25a06fe6 e-con-full e-flex e-con e-child" data-id="25a06fe6" data-element_type="container">
+            <div class="elementor-element elementor-element-e858c6d elementor-widget__width-initial elementor-widget elementor-widget-image" data-id="e858c6d" data-element_type="widget" data-widget_type="image.default">
+              <div class="elementor-widget-container">
+                <img decoding="async" width="1290" height="1017" src="https://app.clicopy.com.br/uploads/image-1747834717885-7a2c7436-4a4b-4615-8584-9e6c4e7dfd27.jpeg?v=1747834717942" class="attachment-full size-full wp-image-925 entered editable-element lazyload" alt="" data-lazy-srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039.jpg 1290w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039-300x237.jpg 300w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039-1024x807.jpg 1024w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039-768x605.jpg 768w" data-lazy-sizes="(max-width: 1290px) 100vw, 1290px" data-lazy-src="https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039.jpg" data-ll-status="loaded" sizes="(max-width: 1290px) 100vw, 1290px" srcset="https://app.clicopy.com.br/uploads/image-1747834717885-7a2c7436-4a4b-4615-8584-9e6c4e7dfd27.jpeg?v=1747834717942"><noscript><img loading="lazy" decoding="async" width="1290" height="1017" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039.jpg" class="attachment-full size-full wp-image-925" alt="" srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039.jpg 1290w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039-300x237.jpg 300w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039-1024x807.jpg 1024w, https://jaquelinecosta.com.br/wp-content/uploads/2025/05/Imagem-do-WhatsApp-de-2025-05-04-as-17.20.07_83711039-768x605.jpg 768w" sizes="(max-width: 1290px) 100vw, 1290px"></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="elementor-element elementor-element-60ea4887 e-con-full e-flex e-con e-child" data-id="60ea4887" data-element_type="container">
+            <div class="elementor-element elementor-element-3f46c36d elementor-widget__width-initial elementor-widget-mobile__width-initial elementor-widget elementor-widget-image-box" data-id="3f46c36d" data-element_type="widget" data-widget_type="image-box.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-image-box-wrapper">
+                  <div class="elementor-image-box-content">
+                    <h3 class="elementor-image-box-title">
+                      O que você <span class="degrade">vai ter acesso:</span>
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-2dd645 e-con-full e-flex e-con e-child" data-id="2dd645" data-element_type="container">
+              <div class="elementor-element elementor-element-46d322cd elementor-mobile-align-center elementor-widget__width-initial elementor-icon-list--layout-inline elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="46d322cd" data-element_type="widget" data-widget_type="icon-list.default">
+                <div class="elementor-widget-container">
+                  <ul class="elementor-icon-list-items elementor-inline-items">
+                    <li class="elementor-icon-list-item elementor-inline-item">
+                      <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span> <span class="elementor-icon-list-text">Mais de 2.300 vídeos em HD</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-6ca0af76 elementor-mobile-align-center elementor-widget__width-initial elementor-icon-list--layout-inline elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="6ca0af76" data-element_type="widget" data-widget_type="icon-list.default">
+                <div class="elementor-widget-container">
+                  <ul class="elementor-icon-list-items elementor-inline-items">
+                    <li class="elementor-icon-list-item elementor-inline-item">
+                      <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span> <span class="elementor-icon-list-text">Vídeos Narrados em HD</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-1085913e e-con-full e-flex e-con e-child" data-id="1085913e" data-element_type="container">
+              <div class="elementor-element elementor-element-1f88049e elementor-mobile-align-center elementor-widget__width-initial elementor-icon-list--layout-inline elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="1f88049e" data-element_type="widget" data-widget_type="icon-list.default">
+                <div class="elementor-widget-container">
+                  <ul class="elementor-icon-list-items elementor-inline-items">
+                    <li class="elementor-icon-list-item elementor-inline-item">
+                      <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span> <span class="elementor-icon-list-text">= 1.000 Vídeos&nbsp;<span style="color: #4AE801;"><b>(bônus)</b></span></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-433e86fe elementor-mobile-align-center elementor-widget__width-initial elementor-icon-list--layout-inline elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="433e86fe" data-element_type="widget" data-widget_type="icon-list.default">
+                <div class="elementor-widget-container">
+                  <ul class="elementor-icon-list-items elementor-inline-items">
+                    <li class="elementor-icon-list-item elementor-inline-item">
+                      <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span> <span class="elementor-icon-list-text">Link dos produtos em cada vídeo <span style="color: #4AE801;"><b>(bônus)</b></span></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-2d6d4246 e-con-full e-flex e-con e-child" data-id="2d6d4246" data-element_type="container">
+              <div class="elementor-element elementor-element-7f8638db elementor-mobile-align-center elementor-widget__width-initial elementor-icon-list--layout-inline elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="7f8638db" data-element_type="widget" data-widget_type="icon-list.default">
+                <div class="elementor-widget-container">
+                  <ul class="elementor-icon-list-items elementor-inline-items">
+                    <li class="elementor-icon-list-item elementor-inline-item">
+                      <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span> <span class="elementor-icon-list-text">Separados Por pastas</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-4174eae6 elementor-mobile-align-center elementor-widget__width-initial elementor-icon-list--layout-inline elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="4174eae6" data-element_type="widget" data-widget_type="icon-list.default">
+                <div class="elementor-widget-container">
+                  <ul class="elementor-icon-list-items elementor-inline-items">
+                    <li class="elementor-icon-list-item elementor-inline-item">
+                      <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg></span> <span class="elementor-icon-list-text">Acesso Vitalício</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-2f2a6f36 elementor-widget__width-initial elementor-align-left elementor-mobile-align-center elementor-widget elementor-widget-button" data-id="2f2a6f36" data-element_type="widget" data-widget_type="button.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-button-wrapper">
+                  <span class="elementor-button-content-wrapper"><span class="elementor-button-text"><a class="elementor-button elementor-button-link elementor-size-sm editable-element" href="https://pay.kiwify.com.br/2SKjpVS">COMPRAR AGORA</a></span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="elementor-element elementor-element-8947c90 e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="8947c90" data-element_type="container" id="offer" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+        <div class="e-con-inner">
+          <div class="elementor-element elementor-element-663196c1 e-con-full e-flex e-con e-child" data-id="663196c1" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+            <div class="elementor-element elementor-element-873820b elementor-widget__width-initial elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="873820b" data-element_type="widget" data-widget_type="icon-list.default">
+              <div class="elementor-widget-container">
+                <ul class="elementor-icon-list-items">
+                  <li class="elementor-icon-list-item">
+                    <span class="elementor-icon-list-text">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;OFERTA&nbsp; EXCLUSIVA</span>
+                  </li>
+                  <li class="elementor-icon-list-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg></span> <span class="elementor-icon-list-text">+ de 2.000<b>&nbsp;vídeos</b>&nbsp;virais da Shopee em HD&nbsp;</span>
+                  </li>
+                  <li class="elementor-icon-list-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg></span> <span class="elementor-icon-list-text"><b>Link dos produtos</b> em cada vídeo</span>
+                  </li>
+                  <li class="elementor-icon-list-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg></span> <span class="elementor-icon-list-text">Bônus <b>Exclusivos</b></span>
+                  </li>
+                  <li class="elementor-icon-list-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg></span> <span class="elementor-icon-list-text">Atualização <b>semanal</b></span>
+                  </li>
+                  <li class="elementor-icon-list-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-far-check-circle" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M256 8C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 48c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m140.204 130.267l-22.536-22.718c-4.667-4.705-12.265-4.736-16.97-.068L215.346 303.697l-59.792-60.277c-4.667-4.705-12.265-4.736-16.97-.069l-22.719 22.536c-4.705 4.667-4.736 12.265-.068 16.971l90.781 91.516c4.667 4.705 12.265 4.736 16.97.068l172.589-171.204c4.704-4.668 4.734-12.266.067-16.971z"></path></svg></span> <span class="elementor-icon-list-text">Bônus vídeos narrados em HD&nbsp;</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-5f946d3d e-con-full e-flex e-con e-child" data-id="5f946d3d" data-element_type="container">
+              <div class="elementor-element elementor-element-26a3942 elementor-widget__width-initial elementor-widget-mobile__width-initial elementor-widget elementor-widget-image-box" data-id="26a3942" data-element_type="widget" data-widget_type="image-box.default">
+                <div class="elementor-widget-container">
+                  <div class="elementor-image-box-wrapper">
+                    <div class="elementor-image-box-content">
+                      <h3 class="elementor-image-box-title">
+                        No Total Isso <b>Deveria Custar</b> <span style="color:#FF1D1D"><b>R$ 59,90</b></span>
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-2551d796 elementor-widget__width-initial elementor-widget-mobile__width-initial elementor-widget elementor-widget-image-box" data-id="2551d796" data-element_type="widget" data-widget_type="image-box.default">
+                <div class="elementor-widget-container">
+                  <div class="elementor-image-box-wrapper">
+                    <div class="elementor-image-box-content">
+                      <h3 class="elementor-image-box-title">
+                        OFERTA ESPECIAL
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-519a51e elementor-widget elementor-widget-heading" data-id="519a51e" data-element_type="widget" data-widget_type="heading.default">
+                <div class="elementor-widget-container">
+                  <h2 class="elementor-heading-title elementor-size-default">
+                    <span class="degrade">R$ 14,90</span>
+                  </h2>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-2a46ff98 elementor-widget__width-initial elementor-align-center elementor-mobile-align-justify elementor-widget elementor-widget-button" data-id="2a46ff98" data-element_type="widget" data-widget_type="button.default">
+                <div class="elementor-widget-container">
+                  <div class="elementor-button-wrapper">
+                    <a class="elementor-button elementor-button-link elementor-size-sm editable-element" href="https://pay.kiwify.com.br/2SKjpVS"><span class="elementor-button-content-wrapper"><span class="elementor-button-icon"><svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" viewbox="0 0 65 65" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0.172036 42.4404C0.287934 46.1198 0.602012 49.2782 1.0656 51.4256C2.48648 58.0083 6.44864 61.9703 13.0294 63.389C16.3745 64.1102 22.1853 64.428 32.026 64.428C44.242 64.428 49.9508 63.973 53.434 62.7218C59.5749 60.5158 62.5943 56.1169 63.518 48.0308C63.9869 43.9265 64.1678 31.747 63.8878 23.1464C63.7393 18.5868 63.599 16.9121 63.1507 14.3514C61.888 7.13763 57.825 2.86052 50.8933 1.44782C47.4461 0.745422 41.5753 0.427978 32.026 0.427978C22.4766 0.427979 16.6058 0.745423 13.1586 1.44783C8.11637 2.47541 4.56709 5.04519 2.56526 9.11798C1.41373 11.4606 0.842137 13.7153 0.453521 17.4486C0.0682673 21.1494 -0.0810984 34.4056 0.172036 42.4404ZM4.83981 42.3673C5.12685 50.2886 5.9887 53.5649 8.43673 56.0415C10.4766 58.1053 13.3005 59.0189 19.0916 59.4888C22.348 59.7529 41.7039 59.7529 44.9603 59.4888C50.7514 59.0189 53.5754 58.1053 55.6152 56.0415C57.7344 53.8976 58.6335 51.1108 59.0844 45.2904C59.3428 41.9562 59.3428 22.9019 59.0844 19.5678C58.6341 13.7549 57.7145 10.8918 55.6384 8.83985C53.4878 6.71408 50.7327 5.8249 44.8872 5.36964C41.548 5.10964 22.5039 5.10964 19.1647 5.36964C13.2489 5.83031 10.479 6.73952 8.31937 8.9293C6.32514 10.9514 5.41783 13.7879 4.98684 19.3486C4.78529 21.9492 4.68255 38.0275 4.83981 42.3673ZM17.5935 33.5997C17.7745 33.8654 18.108 34.2204 18.335 34.3887C18.7421 34.6905 18.8807 34.6953 29.2004 34.7675L39.6533 34.8406L37.2997 36.7128C34.6545 38.8169 34.2774 39.302 34.4053 40.4367C34.5362 41.5984 35.5301 42.5135 36.661 42.5135C37.016 42.5135 37.4502 42.4376 37.6259 42.345C38.4141 41.9287 43.0561 38.0819 44.3895 36.7399C46.264 34.8533 46.7141 34.0185 46.7141 32.4291C46.7141 30.829 46.2558 29.9788 44.3851 28.1091C43.0465 26.7713 38.3961 22.9217 37.6259 22.5137C37.4502 22.4208 37.016 22.3447 36.661 22.3447C35.5301 22.3447 34.5362 23.2597 34.4053 24.4215C34.2783 25.5486 34.6523 26.0313 37.2867 28.1395L39.6331 30.0176L29.1903 30.0907C18.8808 30.1629 18.7421 30.1677 18.335 30.4695C17.6355 30.9879 17.2647 31.6666 17.2647 32.4291C17.2647 32.9014 17.3676 33.2678 17.5935 33.5997Z" fill="white"></path></svg></span> <span class="elementor-button-text">COMPRAR AGORA</span></span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-55eb046d elementor-widget elementor-widget-image" data-id="55eb046d" data-element_type="widget" data-widget_type="image.default">
+                <div class="elementor-widget-container">
+                  <img decoding="async" width="304" height="71" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo.png" class="attachment-large size-large wp-image-697 entered lazyloaded" alt="" data-lazy-srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo.png 304w, https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo-300x70.png 300w" data-lazy-sizes="(max-width: 304px) 100vw, 304px" data-lazy-src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo.png" data-ll-status="loaded" sizes="(max-width: 304px) 100vw, 304px" srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo.png 304w, https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo-300x70.png 300w"><noscript><img loading="lazy" decoding="async" width="304" height="71" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo.png" class="attachment-large size-large wp-image-697" alt="" srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo.png 304w, https://jaquelinecosta.com.br/wp-content/uploads/2025/02/selo-300x70.png 300w" sizes="(max-width: 304px) 100vw, 304px"></noscript>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-6677ab3a elementor-widget__width-initial elementor-widget elementor-widget-progress" data-id="6677ab3a" data-element_type="widget" data-widget_type="progress.default">
+              <div class="elementor-widget-container">
+                <span class="elementor-title" id="elementor-progress-bar-6677ab3a">144 pessoas começaram hoje - E já vão lucrar !</span>
+                <div aria-labelledby="elementor-progress-bar-6677ab3a" class="elementor-progress-wrapper progress-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="86">
+                  <div class="elementor-progress-bar" data-max="86" style="width: 86%;">
+                    <span class="elementor-progress-percentage">86%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="elementor-element elementor-element-2323080b e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="2323080b" data-element_type="container" id="glowe">
+        <div class="e-con-inner">
+          <div class="elementor-element elementor-element-4a2282df e-con-full e-flex e-con e-child" data-id="4a2282df" data-element_type="container">
+            <div class="elementor-element elementor-element-6189938b elementor-widget__width-initial elementor-widget elementor-widget-image" data-id="6189938b" data-element_type="widget" data-widget_type="image.default">
+              <div class="elementor-widget-container">
+                <img decoding="async" width="678" height="468" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4.webp" class="attachment-full size-full wp-image-621 entered lazyloaded" alt="" data-lazy-srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4.webp 678w, https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4-300x207.webp 300w" data-lazy-sizes="(max-width: 678px) 100vw, 678px" data-lazy-src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4.webp" data-ll-status="loaded" sizes="(max-width: 678px) 100vw, 678px" srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4.webp 678w, https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4-300x207.webp 300w"><noscript><img loading="lazy" decoding="async" width="678" height="468" src="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4.webp" class="attachment-full size-full wp-image-621" alt="" srcset="https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4.webp 678w, https://jaquelinecosta.com.br/wp-content/uploads/2025/02/garantia-4-300x207.webp 300w" sizes="(max-width: 678px) 100vw, 678px"></noscript>
+              </div>
+            </div>
+          </div>
+          <div class="elementor-element elementor-element-2eee3588 e-con-full e-flex e-con e-child" data-id="2eee3588" data-element_type="container">
+            <div class="elementor-element elementor-element-77b54e29 elementor-widget-mobile__width-initial elementor-widget elementor-widget-image-box" data-id="77b54e29" data-element_type="widget" data-widget_type="image-box.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-image-box-wrapper">
+                  <div class="elementor-image-box-content">
+                    <h3 class="elementor-image-box-title">
+                      Garantia de <span class="degrade">7 dias</span>
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-685f36e2 elementor-widget__width-initial elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-widget elementor-widget-icon-list" data-id="685f36e2" data-element_type="widget" data-widget_type="icon-list.default">
+              <div class="elementor-widget-container">
+                <ul class="elementor-icon-list-items">
+                  <li class="elementor-icon-list-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check-circle" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span> <span class="elementor-icon-list-text">Tenha acesso aos vídeos</span>
+                  </li>
+                  <li class="elementor-icon-list-item">
+                    <span class="elementor-icon-list-icon"><svg aria-hidden="true" class="e-font-icon-svg e-fas-check-circle" viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span> <span class="elementor-icon-list-text">Publique e veja suas vendas aumentarem</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-728b734 elementor-widget__width-initial elementor-widget-mobile__width-initial elementor-widget elementor-widget-image-box" data-id="728b734" data-element_type="widget" data-widget_type="image-box.default">
+              <div class="elementor-widget-container">
+                <div class="elementor-image-box-wrapper">
+                  <div class="elementor-image-box-content">
+                    <h3 class="elementor-image-box-title">
+                      Se não gostar: 100% do seu dinheiro de volta. Sem perguntas e sem complicação.
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="elementor-element elementor-element-26be33c3 e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="26be33c3" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+        <div class="e-con-inner">
+          <div class="elementor-element elementor-element-4872da7 e-con-full e-flex e-con e-child" data-id="4872da7" data-element_type="container">
+            <div class="elementor-element elementor-element-19db4a5b elementor-widget__width-initial elementor-widget elementor-widget-heading" data-id="19db4a5b" data-element_type="widget" data-widget_type="heading.default">
+              <div class="elementor-widget-container">
+                <h2 class="elementor-heading-title elementor-size-default">
+                  Se ficou <b>alguma dúvida...</b>
+                </h2>
+              </div>
+            </div>
+            <div class="elementor-element elementor-element-f132fcc elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-widget elementor-widget-n-accordion" data-id="f132fcc" data-element_type="widget" data-settings="{&quot;default_state&quot;:&quot;expanded&quot;,&quot;max_items_expended&quot;:&quot;one&quot;,&quot;n_accordion_animation_duration&quot;:{&quot;unit&quot;:&quot;ms&quot;,&quot;size&quot;:400,&quot;sizes&quot;:[]}}" data-widget_type="nested-accordion.default">
+              <div class="elementor-widget-container">
+                <div class="e-n-accordion" aria-label="Accordion. Open links with Enter or Space, close with Escape, and navigate with Arrow Keys">
+                  <details id="e-n-accordion-item-2520" class="e-n-accordion-item" style="">
+                    <summary class="e-n-accordion-item-title" data-accordion-index="1" tabindex="0" aria-expanded="false" aria-controls="e-n-accordion-item-2520">
+                      <div class="e-n-accordion-item-title-text">
+                        <span class="e-n-accordion-item-title-header">Como acessar o produto?</span>
+                      </div><span class="e-n-accordion-item-title-icon"><span class="e-opened"><svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-up" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"></path></svg></span> <span class="e-closed"><svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-down" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"></path></svg></span></span>
+                    </summary>
+                    <div role="region" aria-labelledby="e-n-accordion-item-2520" class="elementor-element elementor-element-1a8f9bc e-con-full e-flex e-con e-child" data-id="1a8f9bc" data-element_type="container">
+                      <div class="elementor-element elementor-element-2a5c0c1e elementor-widget elementor-widget-text-editor" data-id="2a5c0c1e" data-element_type="widget" data-widget_type="text-editor.default">
+                        <div class="elementor-widget-container">
+                          Após a compra, você receberá um e-mail com o acesso à nossa área de membros, onde poderá acessar o produto com o Link.
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                  <details id="e-n-accordion-item-2521" class="e-n-accordion-item" style="">
+                    <summary class="e-n-accordion-item-title" data-accordion-index="2" tabindex="-1" aria-expanded="false" aria-controls="e-n-accordion-item-2521">
+                      <div class="e-n-accordion-item-title-text">
+                        <span class="e-n-accordion-item-title-header">O pagamento é único?</span>
+                      </div><span class="e-n-accordion-item-title-icon"><span class="e-opened"><svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-up" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"></path></svg></span> <span class="e-closed"><svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-down" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"></path></svg></span></span>
+                    </summary>
+                    <div role="region" aria-labelledby="e-n-accordion-item-2521" class="elementor-element elementor-element-63ed6b0f e-con-full e-flex e-con e-child" data-id="63ed6b0f" data-element_type="container">
+                      <div class="elementor-element elementor-element-3603aa3a elementor-widget elementor-widget-text-editor" data-id="3603aa3a" data-element_type="widget" data-widget_type="text-editor.default">
+                        <div class="elementor-widget-container">
+                          Sim, você paga apenas uma vez e tem acesso vitalício.
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                  <details id="e-n-accordion-item-2522" class="e-n-accordion-item" style="">
+                    <summary class="e-n-accordion-item-title" data-accordion-index="3" tabindex="-1" aria-expanded="false" aria-controls="e-n-accordion-item-2522">
+                      <div class="e-n-accordion-item-title-text">
+                        <span class="e-n-accordion-item-title-header">Quais são as formas de pagamento disponíveis?</span>
+                      </div><span class="e-n-accordion-item-title-icon"><span class="e-opened"><svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-up" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"></path></svg></span> <span class="e-closed"><svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-down" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"></path></svg></span></span>
+                    </summary>
+                    <div role="region" aria-labelledby="e-n-accordion-item-2522" class="elementor-element elementor-element-572d9288 e-con-full e-flex e-con e-child" data-id="572d9288" data-element_type="container">
+                      <div class="elementor-element elementor-element-64f0dc79 elementor-widget elementor-widget-text-editor" data-id="64f0dc79" data-element_type="widget" data-widget_type="text-editor.default">
+                        <div class="elementor-widget-container">
+                          Aceitamos cartão de crédito e Pix.
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                  <details id="e-n-accordion-item-2523" class="e-n-accordion-item" open style="">
+                    <summary class="e-n-accordion-item-title" data-accordion-index="4" tabindex="-1" aria-expanded="true" aria-controls="e-n-accordion-item-2523">
+                      <div class="e-n-accordion-item-title-text">
+                        <span class="e-n-accordion-item-title-header">Em quanto tempo recebo o acesso?</span>
+                      </div><span class="e-n-accordion-item-title-icon"><span class="e-opened"><svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-up" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"></path></svg></span> <span class="e-closed"><svg aria-hidden="true" class="e-font-icon-svg e-fas-arrow-down" viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"></path></svg></span></span>
+                    </summary>
+                    <div role="region" aria-labelledby="e-n-accordion-item-2523" class="elementor-element elementor-element-4ac53b8e e-con-full e-flex e-con e-child" data-id="4ac53b8e" data-element_type="container">
+                      <div class="elementor-element elementor-element-170f9c31 elementor-widget elementor-widget-text-editor" data-id="170f9c31" data-element_type="widget" data-widget_type="text-editor.default">
+                        <div class="elementor-widget-container">
+                          O acesso é imediato! Você receberá um e-mail com o seu acesso na plataforma da Kiwify.<br>
+                          Para acessar, basta entrar na Kiwify com o mesmo e-mail da compra, e o produto estará disponível para você.
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="elementor-element elementor-element-1ef6a4f5 e-flex e-con-boxed e-con e-parent e-lazyloaded" data-id="1ef6a4f5" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+        <div class="e-con-inner">
+          <div class="elementor-element elementor-element-5534f2f1 elementor-widget-mobile__width-initial elementor-widget elementor-widget-image-box" data-id="5534f2f1" data-element_type="widget" data-widget_type="image-box.default">
+            <div class="elementor-widget-container">
+              <div class="elementor-image-box-wrapper">
+                <div class="elementor-image-box-content">
+                  <h3 class="elementor-image-box-title">
+                    Este site não é afiliado ao Facebook ou a qualquer entidade do Facebook. Depois que você sair do Facebook, a responsabilidade não é deles e sim do nosso site. Fazemos todos os esforços para indicar claramente e mostrar todas as provas do produto e usamos resultados reais. Todas e quaisquer declarações prospectivas contidas neste site ou em qualquer um de nossos produtos têm a intenção de expressar nossa opinião sobre o potencial de ganhos que algumas pessoas podem alcançar. Mas muitos fatores serão importantes para determinar seus resultados reais, e não garantimos que você obterá resultados semelhantes aos nossos ou aos de qualquer outra pessoa.
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="elementor-element elementor-element-2f5c13ec e-flex e-con-boxed e-con e-child" data-id="2f5c13ec" data-element_type="container">
+            <div class="e-con-inner">
+              <div class="elementor-element elementor-element-666b6064 elementor-widget-mobile__width-initial elementor-widget elementor-widget-image-box" data-id="666b6064" data-element_type="widget" data-widget_type="image-box.default">
+                <div class="elementor-widget-container">
+                  <div class="elementor-image-box-wrapper">
+                    <div class="elementor-image-box-content">
+                      <h3 class="elementor-image-box-title">
+                        Pack premium Shopee - Lucas | 2025
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-1cd459c4 elementor-widget__width-initial elementor-widget-mobile__width-inherit elementor-widget elementor-widget-text-editor" data-id="1cd459c4" data-element_type="widget" data-widget_type="text-editor.default">
+                <div class="elementor-widget-container">
+                  <span style="color: #999999;"><span style="text-decoration: underline;"><a style="text-decoration: underline; color: #999999;" href="https://packpaginas7d.com.br/termos-de-uso">Termos de Uso</a></span> | <a style="color: #999999;" href="https://packpaginas7d.com.br/politicas/"><span style="text-decoration: underline;">Políticas de Privacidade</span></a></span>
+                </div>
+              </div>
+              <div class="elementor-element elementor-element-57265718 elementor-widget-mobile__width-initial elementor-widget elementor-widget-image-box" data-id="57265718" data-element_type="widget" data-widget_type="image-box.default">
+                <div class="elementor-widget-container">
+                  <div class="elementor-image-box-wrapper">
+                    <div class="elementor-image-box-content">
+                      <h3 class="elementor-image-box-title">
+                        Todos os direitos reservados.
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="speculationrules">
+    {"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wp-admin\/*","\/wp-content\/uploads\/*","\/wp-content\/*","\/wp-content\/plugins\/*","\/wp-content\/themes\/hello-elementor\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+    </script> 
+    <script>
+
+                                const lazyloadRunObserver = () => {
+                                        const lazyloadBackgrounds = document.querySelectorAll( `.e-con.e-parent:not(.e-lazyloaded)` );
+                                        const lazyloadBackgroundObserver = new IntersectionObserver( ( entries ) => {
+                                                entries.forEach( ( entry ) => {
+                                                        if ( entry.isIntersecting ) {
+                                                                let lazyloadBackground = entry.target;
+                                                                if( lazyloadBackground ) {
+                                                                        lazyloadBackground.classList.add( 'e-lazyloaded' );
+                                                                }
+                                                                lazyloadBackgroundObserver.unobserve( entry.target );
+                                                        }
+                                                });
+                                        }, { rootMargin: '200px 0px 200px 0px' } );
+                                        lazyloadBackgrounds.forEach( ( lazyloadBackground ) => {
+                                                lazyloadBackgroundObserver.observe( lazyloadBackground );
+                                        } );
+                                };
+                                const events = [
+                                        'DOMContentLoaded',
+                                        'elementor/lazyload/observe',
+                                ];
+                                events.forEach( ( event ) => {
+                                        document.addEventListener( event, lazyloadRunObserver );
+                                } );
+    </script> 
+    <script id="rocket-browser-checker-js-after" src="data:text/javascript;base64,CiJ1c2Ugc3RyaWN0Ijt2YXIgX2NyZWF0ZUNsYXNzPWZ1bmN0aW9uKCl7ZnVuY3Rpb24gZGVmaW5lUHJvcGVydGllcyh0YXJnZXQscHJvcHMpe2Zvcih2YXIgaT0wO2k8cHJvcHMubGVuZ3RoO2krKyl7dmFyIGRlc2NyaXB0b3I9cHJvcHNbaV07ZGVzY3JpcHRvci5lbnVtZXJhYmxlPWRlc2NyaXB0b3IuZW51bWVyYWJsZXx8ITEsZGVzY3JpcHRvci5jb25maWd1cmFibGU9ITAsInZhbHVlImluIGRlc2NyaXB0b3ImJihkZXNjcmlwdG9yLndyaXRhYmxlPSEwKSxPYmplY3QuZGVmaW5lUHJvcGVydHkodGFyZ2V0LGRlc2NyaXB0b3Iua2V5LGRlc2NyaXB0b3IpfX1yZXR1cm4gZnVuY3Rpb24oQ29uc3RydWN0b3IscHJvdG9Qcm9wcyxzdGF0aWNQcm9wcyl7cmV0dXJuIHByb3RvUHJvcHMmJmRlZmluZVByb3BlcnRpZXMoQ29uc3RydWN0b3IucHJvdG90eXBlLHByb3RvUHJvcHMpLHN0YXRpY1Byb3BzJiZkZWZpbmVQcm9wZXJ0aWVzKENvbnN0cnVjdG9yLHN0YXRpY1Byb3BzKSxDb25zdHJ1Y3Rvcn19KCk7ZnVuY3Rpb24gX2NsYXNzQ2FsbENoZWNrKGluc3RhbmNlLENvbnN0cnVjdG9yKXtpZighKGluc3RhbmNlIGluc3RhbmNlb2YgQ29uc3RydWN0b3IpKXRocm93IG5ldyBUeXBlRXJyb3IoIkNhbm5vdCBjYWxsIGEgY2xhc3MgYXMgYSBmdW5jdGlvbiIpfXZhciBSb2NrZXRCcm93c2VyQ29tcGF0aWJpbGl0eUNoZWNrZXI9ZnVuY3Rpb24oKXtmdW5jdGlvbiBSb2NrZXRCcm93c2VyQ29tcGF0aWJpbGl0eUNoZWNrZXIob3B0aW9ucyl7X2NsYXNzQ2FsbENoZWNrKHRoaXMsUm9ja2V0QnJvd3NlckNvbXBhdGliaWxpdHlDaGVja2VyKSx0aGlzLnBhc3NpdmVTdXBwb3J0ZWQ9ITEsdGhpcy5fY2hlY2tQYXNzaXZlT3B0aW9uKHRoaXMpLHRoaXMub3B0aW9ucz0hIXRoaXMucGFzc2l2ZVN1cHBvcnRlZCYmb3B0aW9uc31yZXR1cm4gX2NyZWF0ZUNsYXNzKFJvY2tldEJyb3dzZXJDb21wYXRpYmlsaXR5Q2hlY2tlcixbe2tleToiX2NoZWNrUGFzc2l2ZU9wdGlvbiIsdmFsdWU6ZnVuY3Rpb24oc2VsZil7dHJ5e3ZhciBvcHRpb25zPXtnZXQgcGFzc2l2ZSgpe3JldHVybiEoc2VsZi5wYXNzaXZlU3VwcG9ydGVkPSEwKX19O3dpbmRvdy5hZGRFdmVudExpc3RlbmVyKCJ0ZXN0IixudWxsLG9wdGlvbnMpLHdpbmRvdy5yZW1vdmVFdmVudExpc3RlbmVyKCJ0ZXN0IixudWxsLG9wdGlvbnMpfWNhdGNoKGVycil7c2VsZi5wYXNzaXZlU3VwcG9ydGVkPSExfX19LHtrZXk6ImluaXRSZXF1ZXN0SWRsZUNhbGxiYWNrIix2YWx1ZTpmdW5jdGlvbigpeyExIGluIHdpbmRvdyYmKHdpbmRvdy5yZXF1ZXN0SWRsZUNhbGxiYWNrPWZ1bmN0aW9uKGNiKXt2YXIgc3RhcnQ9RGF0ZS5ub3coKTtyZXR1cm4gc2V0VGltZW91dChmdW5jdGlvbigpe2NiKHtkaWRUaW1lb3V0OiExLHRpbWVSZW1haW5pbmc6ZnVuY3Rpb24oKXtyZXR1cm4gTWF0aC5tYXgoMCw1MC0oRGF0ZS5ub3coKS1zdGFydCkpfX0pfSwxKX0pLCExIGluIHdpbmRvdyYmKHdpbmRvdy5jYW5jZWxJZGxlQ2FsbGJhY2s9ZnVuY3Rpb24oaWQpe3JldHVybiBjbGVhclRpbWVvdXQoaWQpfSl9fSx7a2V5OiJpc0RhdGFTYXZlck1vZGVPbiIsdmFsdWU6ZnVuY3Rpb24oKXtyZXR1cm4iY29ubmVjdGlvbiJpbiBuYXZpZ2F0b3ImJiEwPT09bmF2aWdhdG9yLmNvbm5lY3Rpb24uc2F2ZURhdGF9fSx7a2V5OiJzdXBwb3J0c0xpbmtQcmVmZXRjaCIsdmFsdWU6ZnVuY3Rpb24oKXt2YXIgZWxlbT1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCJsaW5rIik7cmV0dXJuIGVsZW0ucmVsTGlzdCYmZWxlbS5yZWxMaXN0LnN1cHBvcnRzJiZlbGVtLnJlbExpc3Quc3VwcG9ydHMoInByZWZldGNoIikmJndpbmRvdy5JbnRlcnNlY3Rpb25PYnNlcnZlciYmImlzSW50ZXJzZWN0aW5nImluIEludGVyc2VjdGlvbk9ic2VydmVyRW50cnkucHJvdG90eXBlfX0se2tleToiaXNTbG93Q29ubmVjdGlvbiIsdmFsdWU6ZnVuY3Rpb24oKXtyZXR1cm4iY29ubmVjdGlvbiJpbiBuYXZpZ2F0b3ImJiJlZmZlY3RpdmVUeXBlImluIG5hdmlnYXRvci5jb25uZWN0aW9uJiYoIjJnIj09PW5hdmlnYXRvci5jb25uZWN0aW9uLmVmZmVjdGl2ZVR5cGV8fCJzbG93LTJnIj09PW5hdmlnYXRvci5jb25uZWN0aW9uLmVmZmVjdGl2ZVR5cGUpfX1dKSxSb2NrZXRCcm93c2VyQ29tcGF0aWJpbGl0eUNoZWNrZXJ9KCk7Cg==" data-rocket-status="executed">
+
+    "use strict";var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||!1,descriptor.configurable=!0,"value"in descriptor&&(descriptor.writable=!0),Object.defineProperty(target,descriptor.key,descriptor)}}return function(Constructor,protoProps,staticProps){return protoProps&&defineProperties(Constructor.prototype,protoProps),staticProps&&defineProperties(Constructor,staticProps),Constructor}}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor))throw new TypeError("Cannot call a class as a function")}var RocketBrowserCompatibilityChecker=function(){function RocketBrowserCompatibilityChecker(options){_classCallCheck(this,RocketBrowserCompatibilityChecker),this.passiveSupported=!1,this._checkPassiveOption(this),this.options=!!this.passiveSupported&&options}return _createClass(RocketBrowserCompatibilityChecker,[{key:"_checkPassiveOption",value:function(self){try{var options={get passive(){return!(self.passiveSupported=!0)}};window.addEventListener("test",null,options),window.removeEventListener("test",null,options)}catch(err){self.passiveSupported=!1}}},{key:"initRequestIdleCallback",value:function(){!1 in window&&(window.requestIdleCallback=function(cb){var start=Date.now();return setTimeout(function(){cb({didTimeout:!1,timeRemaining:function(){return Math.max(0,50-(Date.now()-start))}})},1)}),!1 in window&&(window.cancelIdleCallback=function(id){return clearTimeout(id)})}},{key:"isDataSaverModeOn",value:function(){return"connection"in navigator&&!0===navigator.connection.saveData}},{key:"supportsLinkPrefetch",value:function(){var elem=document.createElement("link");return elem.relList&&elem.relList.supports&&elem.relList.supports("prefetch")&&window.IntersectionObserver&&"isIntersecting"in IntersectionObserverEntry.prototype}},{key:"isSlowConnection",value:function(){return"connection"in navigator&&"effectiveType"in navigator.connection&&("2g"===navigator.connection.effectiveType||"slow-2g"===navigator.connection.effectiveType)}}]),RocketBrowserCompatibilityChecker}();
+    </script> 
+    <script id="rocket-preload-links-js-extra">
+
+    var RocketPreloadLinksConfig = {"excludeUris":"\/(?:.+\/)?feed(?:\/(?:.+\/?)?)?$|\/(?:.+\/)?embed\/|\/(index.php\/)?(.*)wp-json(\/.*|$)|\/refer\/|\/go\/|\/recommend\/|\/recommends\/","usesTrailingSlash":"1","imageExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif|pdf|doc|docx|xls|xlsx|php","fileExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif|pdf|doc|docx|xls|xlsx|php|html|htm","siteUrl":"https:\/\/jaquelinecosta.com.br","onHoverDelay":"100","rateThrottle":"3"};
+    </script> 
+    <script id="rocket-preload-links-js-after" src="data:text/javascript;base64,CihmdW5jdGlvbigpIHsKInVzZSBzdHJpY3QiO3ZhciByPSJmdW5jdGlvbiI9PXR5cGVvZiBTeW1ib2wmJiJzeW1ib2wiPT10eXBlb2YgU3ltYm9sLml0ZXJhdG9yP2Z1bmN0aW9uKGUpe3JldHVybiB0eXBlb2YgZX06ZnVuY3Rpb24oZSl7cmV0dXJuIGUmJiJmdW5jdGlvbiI9PXR5cGVvZiBTeW1ib2wmJmUuY29uc3RydWN0b3I9PT1TeW1ib2wmJmUhPT1TeW1ib2wucHJvdG90eXBlPyJzeW1ib2wiOnR5cGVvZiBlfSxlPWZ1bmN0aW9uKCl7ZnVuY3Rpb24gaShlLHQpe2Zvcih2YXIgbj0wO248dC5sZW5ndGg7bisrKXt2YXIgaT10W25dO2kuZW51bWVyYWJsZT1pLmVudW1lcmFibGV8fCExLGkuY29uZmlndXJhYmxlPSEwLCJ2YWx1ZSJpbiBpJiYoaS53cml0YWJsZT0hMCksT2JqZWN0LmRlZmluZVByb3BlcnR5KGUsaS5rZXksaSl9fXJldHVybiBmdW5jdGlvbihlLHQsbil7cmV0dXJuIHQmJmkoZS5wcm90b3R5cGUsdCksbiYmaShlLG4pLGV9fSgpO2Z1bmN0aW9uIGkoZSx0KXtpZighKGUgaW5zdGFuY2VvZiB0KSl0aHJvdyBuZXcgVHlwZUVycm9yKCJDYW5ub3QgY2FsbCBhIGNsYXNzIGFzIGEgZnVuY3Rpb24iKX12YXIgdD1mdW5jdGlvbigpe2Z1bmN0aW9uIG4oZSx0KXtpKHRoaXMsbiksdGhpcy5icm93c2VyPWUsdGhpcy5jb25maWc9dCx0aGlzLm9wdGlvbnM9dGhpcy5icm93c2VyLm9wdGlvbnMsdGhpcy5wcmVmZXRjaGVkPW5ldyBTZXQsdGhpcy5ldmVudFRpbWU9bnVsbCx0aGlzLnRocmVzaG9sZD0xMTExLHRoaXMubnVtT25Ib3Zlcj0wfXJldHVybiBlKG4sW3trZXk6ImluaXQiLHZhbHVlOmZ1bmN0aW9uKCl7IXRoaXMuYnJvd3Nlci5zdXBwb3J0c0xpbmtQcmVmZXRjaCgpfHx0aGlzLmJyb3dzZXIuaXNEYXRhU2F2ZXJNb2RlT24oKXx8dGhpcy5icm93c2VyLmlzU2xvd0Nvbm5lY3Rpb24oKXx8KHRoaXMucmVnZXg9e2V4Y2x1ZGVVcmlzOlJlZ0V4cCh0aGlzLmNvbmZpZy5leGNsdWRlVXJpcywiaSIpLGltYWdlczpSZWdFeHAoIi4oIit0aGlzLmNvbmZpZy5pbWFnZUV4dCsiKSQiLCJpIiksZmlsZUV4dDpSZWdFeHAoIi4oIit0aGlzLmNvbmZpZy5maWxlRXh0KyIpJCIsImkiKX0sdGhpcy5faW5pdExpc3RlbmVycyh0aGlzKSl9fSx7a2V5OiJfaW5pdExpc3RlbmVycyIsdmFsdWU6ZnVuY3Rpb24oZSl7LTE8dGhpcy5jb25maWcub25Ib3ZlckRlbGF5JiZkb2N1bWVudC5hZGRFdmVudExpc3RlbmVyKCJtb3VzZW92ZXIiLGUubGlzdGVuZXIuYmluZChlKSxlLmxpc3RlbmVyT3B0aW9ucyksZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigibW91c2Vkb3duIixlLmxpc3RlbmVyLmJpbmQoZSksZS5saXN0ZW5lck9wdGlvbnMpLGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoInRvdWNoc3RhcnQiLGUubGlzdGVuZXIuYmluZChlKSxlLmxpc3RlbmVyT3B0aW9ucyl9fSx7a2V5OiJsaXN0ZW5lciIsdmFsdWU6ZnVuY3Rpb24oZSl7dmFyIHQ9ZS50YXJnZXQuY2xvc2VzdCgiYSIpLG49dGhpcy5fcHJlcGFyZVVybCh0KTtpZihudWxsIT09bilzd2l0Y2goZS50eXBlKXtjYXNlIm1vdXNlZG93biI6Y2FzZSJ0b3VjaHN0YXJ0Ijp0aGlzLl9hZGRQcmVmZXRjaExpbmsobik7YnJlYWs7Y2FzZSJtb3VzZW92ZXIiOnRoaXMuX2Vhcmx5UHJlZmV0Y2godCxuLCJtb3VzZW91dCIpfX19LHtrZXk6Il9lYXJseVByZWZldGNoIix2YWx1ZTpmdW5jdGlvbih0LGUsbil7dmFyIGk9dGhpcyxyPXNldFRpbWVvdXQoZnVuY3Rpb24oKXtpZihyPW51bGwsMD09PWkubnVtT25Ib3ZlcilzZXRUaW1lb3V0KGZ1bmN0aW9uKCl7cmV0dXJuIGkubnVtT25Ib3Zlcj0wfSwxZTMpO2Vsc2UgaWYoaS5udW1PbkhvdmVyPmkuY29uZmlnLnJhdGVUaHJvdHRsZSlyZXR1cm47aS5udW1PbkhvdmVyKyssaS5fYWRkUHJlZmV0Y2hMaW5rKGUpfSx0aGlzLmNvbmZpZy5vbkhvdmVyRGVsYXkpO3QuYWRkRXZlbnRMaXN0ZW5lcihuLGZ1bmN0aW9uIGUoKXt0LnJlbW92ZUV2ZW50TGlzdGVuZXIobixlLHtwYXNzaXZlOiEwfSksbnVsbCE9PXImJihjbGVhclRpbWVvdXQocikscj1udWxsKX0se3Bhc3NpdmU6ITB9KX19LHtrZXk6Il9hZGRQcmVmZXRjaExpbmsiLHZhbHVlOmZ1bmN0aW9uKGkpe3JldHVybiB0aGlzLnByZWZldGNoZWQuYWRkKGkuaHJlZiksbmV3IFByb21pc2UoZnVuY3Rpb24oZSx0KXt2YXIgbj1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCJsaW5rIik7bi5yZWw9InByZWZldGNoIixuLmhyZWY9aS5ocmVmLG4ub25sb2FkPWUsbi5vbmVycm9yPXQsZG9jdW1lbnQuaGVhZC5hcHBlbmRDaGlsZChuKX0pLmNhdGNoKGZ1bmN0aW9uKCl7fSl9fSx7a2V5OiJfcHJlcGFyZVVybCIsdmFsdWU6ZnVuY3Rpb24oZSl7aWYobnVsbD09PWV8fCJvYmplY3QiIT09KHZvaWQgMD09PWU/InVuZGVmaW5lZCI6cihlKSl8fCExIGluIGV8fC0xPT09WyJodHRwOiIsImh0dHBzOiJdLmluZGV4T2YoZS5wcm90b2NvbCkpcmV0dXJuIG51bGw7dmFyIHQ9ZS5ocmVmLnN1YnN0cmluZygwLHRoaXMuY29uZmlnLnNpdGVVcmwubGVuZ3RoKSxuPXRoaXMuX2dldFBhdGhuYW1lKGUuaHJlZix0KSxpPXtvcmlnaW5hbDplLmhyZWYscHJvdG9jb2w6ZS5wcm90b2NvbCxvcmlnaW46dCxwYXRobmFtZTpuLGhyZWY6dCtufTtyZXR1cm4gdGhpcy5faXNMaW5rT2soaSk/aTpudWxsfX0se2tleToiX2dldFBhdGhuYW1lIix2YWx1ZTpmdW5jdGlvbihlLHQpe3ZhciBuPXQ/ZS5zdWJzdHJpbmcodGhpcy5jb25maWcuc2l0ZVVybC5sZW5ndGgpOmU7cmV0dXJuIG4uc3RhcnRzV2l0aCgiLyIpfHwobj0iLyIrbiksdGhpcy5fc2hvdWxkQWRkVHJhaWxpbmdTbGFzaChuKT9uKyIvIjpufX0se2tleToiX3Nob3VsZEFkZFRyYWlsaW5nU2xhc2giLHZhbHVlOmZ1bmN0aW9uKGUpe3JldHVybiB0aGlzLmNvbmZpZy51c2VzVHJhaWxpbmdTbGFzaCYmIWUuZW5kc1dpdGgoIi8iKSYmIXRoaXMucmVnZXguZmlsZUV4dC50ZXN0KGUpfX0se2tleToiX2lzTGlua09rIix2YWx1ZTpmdW5jdGlvbihlKXtyZXR1cm4gbnVsbCE9PWUmJiJvYmplY3QiPT09KHZvaWQgMD09PWU/InVuZGVmaW5lZCI6cihlKSkmJighdGhpcy5wcmVmZXRjaGVkLmhhcyhlLmhyZWYpJiZlLm9yaWdpbj09PXRoaXMuY29uZmlnLnNpdGVVcmwmJi0xPT09ZS5ocmVmLmluZGV4T2YoIj8iKSYmLTE9PT1lLmhyZWYuaW5kZXhPZigiIyIpJiYhdGhpcy5yZWdleC5leGNsdWRlVXJpcy50ZXN0KGUuaHJlZikmJiF0aGlzLnJlZ2V4LmltYWdlcy50ZXN0KGUuaHJlZikpfX1dLFt7a2V5OiJydW4iLHZhbHVlOmZ1bmN0aW9uKCl7InVuZGVmaW5lZCIhPXR5cGVvZiBSb2NrZXRQcmVsb2FkTGlua3NDb25maWcmJm5ldyBuKG5ldyBSb2NrZXRCcm93c2VyQ29tcGF0aWJpbGl0eUNoZWNrZXIoe2NhcHR1cmU6ITAscGFzc2l2ZTohMH0pLFJvY2tldFByZWxvYWRMaW5rc0NvbmZpZykuaW5pdCgpfX1dKSxufSgpO3QucnVuKCk7Cn0oKSk7Cg==" data-rocket-status="executed">
+
+    (function() {
+    "use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},e=function(){function i(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(e,t,n){return t&&i(e.prototype,t),n&&i(e,n),e}}();function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var t=function(){function n(e,t){i(this,n),this.browser=e,this.config=t,this.options=this.browser.options,this.prefetched=new Set,this.eventTime=null,this.threshold=1111,this.numOnHover=0}return e(n,[{key:"init",value:function(){!this.browser.supportsLinkPrefetch()||this.browser.isDataSaverModeOn()||this.browser.isSlowConnection()||(this.regex={excludeUris:RegExp(this.config.excludeUris,"i"),images:RegExp(".("+this.config.imageExt+")$","i"),fileExt:RegExp(".("+this.config.fileExt+")$","i")},this._initListeners(this))}},{key:"_initListeners",value:function(e){-1<this.config.onHoverDelay&&document.addEventListener("mouseover",e.listener.bind(e),e.listenerOptions),document.addEventListener("mousedown",e.listener.bind(e),e.listenerOptions),document.addEventListener("touchstart",e.listener.bind(e),e.listenerOptions)}},{key:"listener",value:function(e){var t=e.target.closest("a"),n=this._prepareUrl(t);if(null!==n)switch(e.type){case"mousedown":case"touchstart":this._addPrefetchLink(n);break;case"mouseover":this._earlyPrefetch(t,n,"mouseout")}}},{key:"_earlyPrefetch",value:function(t,e,n){var i=this,r=setTimeout(function(){if(r=null,0===i.numOnHover)setTimeout(function(){return i.numOnHover=0},1e3);else if(i.numOnHover>i.config.rateThrottle)return;i.numOnHover++,i._addPrefetchLink(e)},this.config.onHoverDelay);t.addEventListener(n,function e(){t.removeEventListener(n,e,{passive:!0}),null!==r&&(clearTimeout(r),r=null)},{passive:!0})}},{key:"_addPrefetchLink",value:function(i){return this.prefetched.add(i.href),new Promise(function(e,t){var n=document.createElement("link");n.rel="prefetch",n.href=i.href,n.onload=e,n.onerror=t,document.head.appendChild(n)}).catch(function(){})}},{key:"_prepareUrl",value:function(e){if(null===e||"object"!==(void 0===e?"undefined":r(e))||!1 in e||-1===["http:","https:"].indexOf(e.protocol))return null;var t=e.href.substring(0,this.config.siteUrl.length),n=this._getPathname(e.href,t),i={original:e.href,protocol:e.protocol,origin:t,pathname:n,href:t+n};return this._isLinkOk(i)?i:null}},{key:"_getPathname",value:function(e,t){var n=t?e.substring(this.config.siteUrl.length):e;return n.startsWith("/")||(n="/"+n),this._shouldAddTrailingSlash(n)?n+"/":n}},{key:"_shouldAddTrailingSlash",value:function(e){return this.config.usesTrailingSlash&&!e.endsWith("/")&&!this.regex.fileExt.test(e)}},{key:"_isLinkOk",value:function(e){return null!==e&&"object"===(void 0===e?"undefined":r(e))&&(!this.prefetched.has(e.href)&&e.origin===this.config.siteUrl&&-1===e.href.indexOf("?")&&-1===e.href.indexOf("#")&&!this.regex.excludeUris.test(e.href)&&!this.regex.images.test(e.href))}}],[{key:"run",value:function(){"undefined"!=typeof RocketPreloadLinksConfig&&new n(new RocketBrowserCompatibilityChecker({capture:!0,passive:!0}),RocketPreloadLinksConfig).init()}}]),n}();t.run();
+    }());
+    </script> 
+    <script id="hello-theme-frontend-js" defer src="https://jaquelinecosta.com.br/wp-content/themes/hello-elementor/assets/js/hello-frontend.min.js?ver=3.1.0" data-rocket-status="executed"></script> 
+    <script id="elementor-webpack-runtime-js" defer src="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=3.29.0" data-rocket-status="executed"></script> 
+    <script id="elementor-frontend-modules-js" defer src="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=3.29.0" data-rocket-status="executed"></script> 
+    <script id="jquery-ui-core-js" defer src="https://jaquelinecosta.com.br/wp-includes/js/jquery/ui/core.min.js?ver=1.13.3" data-rocket-status="executed"></script> 
+    <script id="elementor-frontend-js-before" src="data:text/javascript;base64,CnZhciBlbGVtZW50b3JGcm9udGVuZENvbmZpZyA9IHsiZW52aXJvbm1lbnRNb2RlIjp7ImVkaXQiOmZhbHNlLCJ3cFByZXZpZXciOmZhbHNlLCJpc1NjcmlwdERlYnVnIjpmYWxzZX0sImkxOG4iOnsic2hhcmVPbkZhY2Vib29rIjoiQ29tcGFydGlsaGFyIG5vIEZhY2Vib29rIiwic2hhcmVPblR3aXR0ZXIiOiJDb21wYXJ0aWxoYXIgbm8gVHdpdHRlciIsInBpbkl0IjoiRml4YXIiLCJkb3dubG9hZCI6IkJhaXhhciIsImRvd25sb2FkSW1hZ2UiOiJCYWl4YXIgaW1hZ2VtIiwiZnVsbHNjcmVlbiI6IlRlbGEgY2hlaWEiLCJ6b29tIjoiWm9vbSIsInNoYXJlIjoiQ29tcGFydGlsaGFyIiwicGxheVZpZGVvIjoiUmVwcm9kdXppciB2XHUwMGVkZGVvIiwicHJldmlvdXMiOiJBbnRlcmlvciIsIm5leHQiOiJQclx1MDBmM3hpbW8iLCJjbG9zZSI6IkZlY2hhciIsImExMXlDYXJvdXNlbFByZXZTbGlkZU1lc3NhZ2UiOiJTbGlkZSBhbnRlcmlvciIsImExMXlDYXJvdXNlbE5leHRTbGlkZU1lc3NhZ2UiOiJQclx1MDBmM3hpbW8gc2xpZGUiLCJhMTF5Q2Fyb3VzZWxGaXJzdFNsaWRlTWVzc2FnZSI6IkVzdGUgXHUwMGU5IG8gcHJpbWVpcm8gc2xpZGUiLCJhMTF5Q2Fyb3VzZWxMYXN0U2xpZGVNZXNzYWdlIjoiRXN0ZSBcdTAwZTkgbyBcdTAwZmFsdGltbyBzbGlkZSIsImExMXlDYXJvdXNlbFBhZ2luYXRpb25CdWxsZXRNZXNzYWdlIjoiSXIgcGFyYSBvIHNsaWRlIn0sImlzX3J0bCI6ZmFsc2UsImJyZWFrcG9pbnRzIjp7InhzIjowLCJzbSI6NDgwLCJtZCI6NzY4LCJsZyI6MTAyNSwieGwiOjE0NDAsInh4bCI6MTYwMH0sInJlc3BvbnNpdmUiOnsiYnJlYWtwb2ludHMiOnsibW9iaWxlIjp7ImxhYmVsIjoiRGlzcG9zaXRpdm9zIG1cdTAwZjN2ZWlzIG5vIG1vZG8gcmV0cmF0byIsInZhbHVlIjo3NjcsImRlZmF1bHRfdmFsdWUiOjc2NywiZGlyZWN0aW9uIjoibWF4IiwiaXNfZW5hYmxlZCI6dHJ1ZX0sIm1vYmlsZV9leHRyYSI6eyJsYWJlbCI6IkRpc3Bvc2l0aXZvcyBtXHUwMGYzdmVpcyBubyBtb2RvIHBhaXNhZ2VtIiwidmFsdWUiOjg4MCwiZGVmYXVsdF92YWx1ZSI6ODgwLCJkaXJlY3Rpb24iOiJtYXgiLCJpc19lbmFibGVkIjpmYWxzZX0sInRhYmxldCI6eyJsYWJlbCI6IlRhYmxldCBubyBtb2RvIHJldHJhdG8iLCJ2YWx1ZSI6MTAyNCwiZGVmYXVsdF92YWx1ZSI6MTAyNCwiZGlyZWN0aW9uIjoibWF4IiwiaXNfZW5hYmxlZCI6dHJ1ZX0sInRhYmxldF9leHRyYSI6eyJsYWJlbCI6IlRhYmxldCBubyBtb2RvIHBhaXNhZ2VtIiwidmFsdWUiOjEyMDAsImRlZmF1bHRfdmFsdWUiOjEyMDAsImRpcmVjdGlvbiI6Im1heCIsImlzX2VuYWJsZWQiOmZhbHNlfSwibGFwdG9wIjp7ImxhYmVsIjoiTm90ZWJvb2siLCJ2YWx1ZSI6MTM2NiwiZGVmYXVsdF92YWx1ZSI6MTM2NiwiZGlyZWN0aW9uIjoibWF4IiwiaXNfZW5hYmxlZCI6dHJ1ZX0sIndpZGVzY3JlZW4iOnsibGFiZWwiOiJUZWxhIGFtcGxhICh3aWRlc2NyZWVuKSIsInZhbHVlIjoyNDAwLCJkZWZhdWx0X3ZhbHVlIjoyNDAwLCJkaXJlY3Rpb24iOiJtaW4iLCJpc19lbmFibGVkIjpmYWxzZX19LAoiaGFzQ3VzdG9tQnJlYWtwb2ludHMiOnRydWV9LCJ2ZXJzaW9uIjoiMy4yOS4wIiwiaXNfc3RhdGljIjpmYWxzZSwiZXhwZXJpbWVudGFsRmVhdHVyZXMiOnsiZV9mb250X2ljb25fc3ZnIjp0cnVlLCJhZGRpdGlvbmFsX2N1c3RvbV9icmVha3BvaW50cyI6dHJ1ZSwiY29udGFpbmVyIjp0cnVlLCJlX2xvY2FsX2dvb2dsZV9mb250cyI6dHJ1ZSwidGhlbWVfYnVpbGRlcl92MiI6dHJ1ZSwiaGVsbG8tdGhlbWUtaGVhZGVyLWZvb3RlciI6dHJ1ZSwibmVzdGVkLWVsZW1lbnRzIjp0cnVlLCJlZGl0b3JfdjIiOnRydWUsImVfZWxlbWVudF9jYWNoZSI6dHJ1ZSwiaG9tZV9zY3JlZW4iOnRydWUsImNsb3VkLWxpYnJhcnkiOnRydWUsImVfb3B0X2luX3Y0X3BhZ2UiOnRydWUsIm1lZ2EtbWVudSI6dHJ1ZX0sInVybHMiOnsiYXNzZXRzIjoiaHR0cHM6XC9cL2phcXVlbGluZWNvc3RhLmNvbS5iclwvd3AtY29udGVudFwvcGx1Z2luc1wvZWxlbWVudG9yXC9hc3NldHNcLyIsImFqYXh1cmwiOiJodHRwczpcL1wvamFxdWVsaW5lY29zdGEuY29tLmJyXC93cC1hZG1pblwvYWRtaW4tYWpheC5waHAiLCJ1cGxvYWRVcmwiOiJodHRwczpcL1wvamFxdWVsaW5lY29zdGEuY29tLmJyXC93cC1jb250ZW50XC91cGxvYWRzIn0sIm5vbmNlcyI6eyJmbG9hdGluZ0J1dHRvbnNDbGlja1RyYWNraW5nIjoiYTFkM2VmMmIwNSJ9LCJzd2lwZXJDbGFzcyI6InN3aXBlciIsInNldHRpbmdzIjp7InBhZ2UiOltdLCJlZGl0b3JQcmVmZXJlbmNlcyI6W119LCJraXQiOnsiYm9keV9iYWNrZ3JvdW5kX2JhY2tncm91bmQiOiJjbGFzc2ljIiwiaGVsbG9faGVhZGVyX2xvZ29fdHlwZSI6ImxvZ28iLCJhY3RpdmVfYnJlYWtwb2ludHMiOlsidmlld3BvcnRfbW9iaWxlIiwidmlld3BvcnRfdGFibGV0Iiwidmlld3BvcnRfbGFwdG9wIl0sImdsb2JhbF9pbWFnZV9saWdodGJveCI6InllcyIsImxpZ2h0Ym94X2VuYWJsZV9jb3VudGVyIjoieWVzIiwibGlnaHRib3hfZW5hYmxlX2Z1bGxzY3JlZW4iOiJ5ZXMiLCJsaWdodGJveF9lbmFibGVfem9vbSI6InllcyIsImxpZ2h0Ym94X2VuYWJsZV9zaGFyZSI6InllcyIsImxpZ2h0Ym94X3RpdGxlX3NyYyI6InRpdGxlIiwibGlnaHRib3hfZGVzY3JpcHRpb25fc3JjIjoiZGVzY3JpcHRpb24iLCJoZWxsb19mb290ZXJfbG9nb190eXBlIjoibG9nbyJ9LCJwb3N0Ijp7ImlkIjo5NDQsInRpdGxlIjoiViVDMyVBRGRlb3MlMjBWaXJhaXMlMjBOYXJyYWRvcyUyMCUyQiUyMENhcGFzJTIwUHJvbnRhcyUyMC0lMjBTaXRlIiwiZXhjZXJwdCI6IiIsImZlYXR1cmVkSW1hZ2UiOmZhbHNlfX07Cg==" data-rocket-status="executed">
+
+    var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false,"isScriptDebug":false},"i18n":{"shareOnFacebook":"Compartilhar no Facebook","shareOnTwitter":"Compartilhar no Twitter","pinIt":"Fixar","download":"Baixar","downloadImage":"Baixar imagem","fullscreen":"Tela cheia","zoom":"Zoom","share":"Compartilhar","playVideo":"Reproduzir v\u00eddeo","previous":"Anterior","next":"Pr\u00f3ximo","close":"Fechar","a11yCarouselPrevSlideMessage":"Slide anterior","a11yCarouselNextSlideMessage":"Pr\u00f3ximo slide","a11yCarouselFirstSlideMessage":"Este \u00e9 o primeiro slide","a11yCarouselLastSlideMessage":"Este \u00e9 o \u00faltimo slide","a11yCarouselPaginationBulletMessage":"Ir para o slide"},"is_rtl":false,"breakpoints":{"xs":0,"sm":480,"md":768,"lg":1025,"xl":1440,"xxl":1600},"responsive":{"breakpoints":{"mobile":{"label":"Dispositivos m\u00f3veis no modo retrato","value":767,"default_value":767,"direction":"max","is_enabled":true},"mobile_extra":{"label":"Dispositivos m\u00f3veis no modo paisagem","value":880,"default_value":880,"direction":"max","is_enabled":false},"tablet":{"label":"Tablet no modo retrato","value":1024,"default_value":1024,"direction":"max","is_enabled":true},"tablet_extra":{"label":"Tablet no modo paisagem","value":1200,"default_value":1200,"direction":"max","is_enabled":false},"laptop":{"label":"Notebook","value":1366,"default_value":1366,"direction":"max","is_enabled":true},"widescreen":{"label":"Tela ampla (widescreen)","value":2400,"default_value":2400,"direction":"min","is_enabled":false}},
+    "hasCustomBreakpoints":true},"version":"3.29.0","is_static":false,"experimentalFeatures":{"e_font_icon_svg":true,"additional_custom_breakpoints":true,"container":true,"e_local_google_fonts":true,"theme_builder_v2":true,"hello-theme-header-footer":true,"nested-elements":true,"editor_v2":true,"e_element_cache":true,"home_screen":true,"cloud-library":true,"e_opt_in_v4_page":true,"mega-menu":true},"urls":{"assets":"https:\/\/jaquelinecosta.com.br\/wp-content\/plugins\/elementor\/assets\/","ajaxurl":"https:\/\/jaquelinecosta.com.br\/wp-admin\/admin-ajax.php","uploadUrl":"https:\/\/jaquelinecosta.com.br\/wp-content\/uploads"},"nonces":{"floatingButtonsClickTracking":"a1d3ef2b05"},"swiperClass":"swiper","settings":{"page":[],"editorPreferences":[]},"kit":{"body_background_background":"classic","hello_header_logo_type":"logo","active_breakpoints":["viewport_mobile","viewport_tablet","viewport_laptop"],"global_image_lightbox":"yes","lightbox_enable_counter":"yes","lightbox_enable_fullscreen":"yes","lightbox_enable_zoom":"yes","lightbox_enable_share":"yes","lightbox_title_src":"title","lightbox_description_src":"description","hello_footer_logo_type":"logo"},"post":{"id":944,"title":"V%C3%ADdeos%20Virais%20Narrados%20%2B%20Capas%20Prontas%20-%20Site","excerpt":"","featuredImage":false}};
+    </script> 
+    <script id="elementor-frontend-js" defer src="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.29.0" data-rocket-status="executed"></script> 
+    <script id="swiper-js" defer src="https://jaquelinecosta.com.br/wp-content/plugins/elementor/assets/lib/swiper/v8/swiper.min.js?ver=8.4.5" data-rocket-status="executed"></script> 
+    <script id="elementor-pro-webpack-runtime-js" defer src="https://jaquelinecosta.com.br/wp-content/plugins/pro-elements/assets/js/webpack-pro.runtime.min.js?ver=3.27.4" data-rocket-status="executed"></script> 
+    <script id="wp-hooks-js" src="https://jaquelinecosta.com.br/wp-includes/js/dist/hooks.min.js?ver=4d63a3d491d11ffd8ac6" data-rocket-status="executed"></script> 
+    <script id="wp-i18n-js" src="https://jaquelinecosta.com.br/wp-includes/js/dist/i18n.min.js?ver=5e580eb46a90c2b997e6" data-rocket-status="executed"></script> 
+    <script id="wp-i18n-js-after" src="data:text/javascript;base64,CndwLmkxOG4uc2V0TG9jYWxlRGF0YSggeyAndGV4dCBkaXJlY3Rpb25cdTAwMDRsdHInOiBbICdsdHInIF0gfSApOwo=" data-rocket-status="executed">
+
+    wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+    </script> 
+    <script id="elementor-pro-frontend-js-before" src="data:text/javascript;base64,CnZhciBFbGVtZW50b3JQcm9Gcm9udGVuZENvbmZpZyA9IHsiYWpheHVybCI6Imh0dHBzOlwvXC9qYXF1ZWxpbmVjb3N0YS5jb20uYnJcL3dwLWFkbWluXC9hZG1pbi1hamF4LnBocCIsIm5vbmNlIjoiMjdhYTY2Y2FiZiIsInVybHMiOnsiYXNzZXRzIjoiaHR0cHM6XC9cL2phcXVlbGluZWNvc3RhLmNvbS5iclwvd3AtY29udGVudFwvcGx1Z2luc1wvcHJvLWVsZW1lbnRzXC9hc3NldHNcLyIsInJlc3QiOiJodHRwczpcL1wvamFxdWVsaW5lY29zdGEuY29tLmJyXC93cC1qc29uXC8ifSwic2V0dGluZ3MiOnsibGF6eV9sb2FkX2JhY2tncm91bmRfaW1hZ2VzIjp0cnVlfSwicG9wdXAiOnsiaGFzUG9wVXBzIjpmYWxzZX0sInNoYXJlQnV0dG9uc05ldHdvcmtzIjp7ImZhY2Vib29rIjp7InRpdGxlIjoiRmFjZWJvb2siLCJoYXNfY291bnRlciI6dHJ1ZX0sInR3aXR0ZXIiOnsidGl0bGUiOiJUd2l0dGVyIn0sImxpbmtlZGluIjp7InRpdGxlIjoiTGlua2VkSW4iLCJoYXNfY291bnRlciI6dHJ1ZX0sInBpbnRlcmVzdCI6eyJ0aXRsZSI6IlBpbnRlcmVzdCIsImhhc19jb3VudGVyIjp0cnVlfSwicmVkZGl0Ijp7InRpdGxlIjoiUmVkZGl0IiwiaGFzX2NvdW50ZXIiOnRydWV9LCJ2ayI6eyJ0aXRsZSI6IlZLIiwiaGFzX2NvdW50ZXIiOnRydWV9LCJvZG5va2xhc3NuaWtpIjp7InRpdGxlIjoiT0siLCJoYXNfY291bnRlciI6dHJ1ZX0sInR1bWJsciI6eyJ0aXRsZSI6IlR1bWJsciJ9LCJkaWdnIjp7InRpdGxlIjoiRGlnZyJ9LCJza3lwZSI6eyJ0aXRsZSI6IlNreXBlIn0sInN0dW1ibGV1cG9uIjp7InRpdGxlIjoiU3R1bWJsZVVwb24iLCJoYXNfY291bnRlciI6dHJ1ZX0sIm1peCI6eyJ0aXRsZSI6Ik1peCJ9LCJ0ZWxlZ3JhbSI6eyJ0aXRsZSI6IlRlbGVncmFtIn0sInBvY2tldCI6eyJ0aXRsZSI6IlBvY2tldCIsImhhc19jb3VudGVyIjp0cnVlfSwieGluZyI6eyJ0aXRsZSI6IlhJTkciLCJoYXNfY291bnRlciI6dHJ1ZX0sIndoYXRzYXBwIjp7InRpdGxlIjoiV2hhdHNBcHAifSwiZW1haWwiOnsidGl0bGUiOiJFbWFpbCJ9LCJwcmludCI6eyJ0aXRsZSI6IlByaW50In0sIngtdHdpdHRlciI6eyJ0aXRsZSI6IlgifSwidGhyZWFkcyI6eyJ0aXRsZSI6IlRocmVhZHMifX0sCiJmYWNlYm9va19zZGsiOnsibGFuZyI6InB0X0JSIiwiYXBwX2lkIjoiIn0sImxvdHRpZSI6eyJkZWZhdWx0QW5pbWF0aW9uVXJsIjoiaHR0cHM6XC9cL2phcXVlbGluZWNvc3RhLmNvbS5iclwvd3AtY29udGVudFwvcGx1Z2luc1wvcHJvLWVsZW1lbnRzXC9tb2R1bGVzXC9sb3R0aWVcL2Fzc2V0c1wvYW5pbWF0aW9uc1wvZGVmYXVsdC5qc29uIn19Owo=" data-rocket-status="executed">
+
+    var ElementorProFrontendConfig = {"ajaxurl":"https:\/\/jaquelinecosta.com.br\/wp-admin\/admin-ajax.php","nonce":"27aa66cabf","urls":{"assets":"https:\/\/jaquelinecosta.com.br\/wp-content\/plugins\/pro-elements\/assets\/","rest":"https:\/\/jaquelinecosta.com.br\/wp-json\/"},"settings":{"lazy_load_background_images":true},"popup":{"hasPopUps":false},"shareButtonsNetworks":{"facebook":{"title":"Facebook","has_counter":true},"twitter":{"title":"Twitter"},"linkedin":{"title":"LinkedIn","has_counter":true},"pinterest":{"title":"Pinterest","has_counter":true},"reddit":{"title":"Reddit","has_counter":true},"vk":{"title":"VK","has_counter":true},"odnoklassniki":{"title":"OK","has_counter":true},"tumblr":{"title":"Tumblr"},"digg":{"title":"Digg"},"skype":{"title":"Skype"},"stumbleupon":{"title":"StumbleUpon","has_counter":true},"mix":{"title":"Mix"},"telegram":{"title":"Telegram"},"pocket":{"title":"Pocket","has_counter":true},"xing":{"title":"XING","has_counter":true},"whatsapp":{"title":"WhatsApp"},"email":{"title":"Email"},"print":{"title":"Print"},"x-twitter":{"title":"X"},"threads":{"title":"Threads"}},
+    "facebook_sdk":{"lang":"pt_BR","app_id":""},"lottie":{"defaultAnimationUrl":"https:\/\/jaquelinecosta.com.br\/wp-content\/plugins\/pro-elements\/modules\/lottie\/assets\/animations\/default.json"}};
+    </script> 
+    <script id="elementor-pro-frontend-js" defer src="https://jaquelinecosta.com.br/wp-content/plugins/pro-elements/assets/js/frontend.min.js?ver=3.27.4" data-rocket-status="executed"></script> 
+    <script id="pro-elements-handlers-js" defer src="https://jaquelinecosta.com.br/wp-content/plugins/pro-elements/assets/js/elements-handlers.min.js?ver=3.27.4" data-rocket-status="executed"></script> 
+    <script>
+    window.lazyLoadOptions=[{elements_selector:"img[data-lazy-src],.rocket-lazyload,iframe[data-lazy-src]",data_src:"lazy-src",data_srcset:"lazy-srcset",data_sizes:"lazy-sizes",class_loading:"lazyloading",class_loaded:"lazyloaded",threshold:300,callback_loaded:function(element){if(element.tagName==="IFRAME"&&element.dataset.rocketLazyload=="fitvidscompatible"){if(element.classList.contains("lazyloaded")){if(typeof window.jQuery!="undefined"){if(jQuery.fn.fitVids){jQuery(element).parent().fitVids()}}}}}},{elements_selector:".rocket-lazyload",data_src:"lazy-src",data_srcset:"lazy-srcset",data_sizes:"lazy-sizes",class_loading:"lazyloading",class_loaded:"lazyloaded",threshold:300,}];window.addEventListener('LazyLoad::Initialized',function(e){var lazyLoadInstance=e.detail.instance;if(window.MutationObserver){var observer=new MutationObserver(function(mutations){var image_count=0;var iframe_count=0;var rocketlazy_count=0;mutations.forEach(function(mutation){for(var i=0;i<mutation.addedNodes.length;i++){if(typeof mutation.addedNodes[i].getElementsByTagName!=='function'){continue}
+    if(typeof mutation.addedNodes[i].getElementsByClassName!=='function'){continue}
+    images=mutation.addedNodes[i].getElementsByTagName('img');is_image=mutation.addedNodes[i].tagName=="IMG";iframes=mutation.addedNodes[i].getElementsByTagName('iframe');is_iframe=mutation.addedNodes[i].tagName=="IFRAME";rocket_lazy=mutation.addedNodes[i].getElementsByClassName('rocket-lazyload');image_count+=images.length;iframe_count+=iframes.length;rocketlazy_count+=rocket_lazy.length;if(is_image){image_count+=1}
+    if(is_iframe){iframe_count+=1}}});if(image_count>0||iframe_count>0||rocketlazy_count>0){lazyLoadInstance.update()}});var b=document.getElementsByTagName("body")[0];var config={childList:!0,subtree:!0};observer.observe(b,config)}},!1)
+    </script>
+    <script data-no-minify="1" async src="https://jaquelinecosta.com.br/wp-content/plugins/wp-rocket/assets/js/lazyload/17.8.3/lazyload.min.js"></script>
+    <script>
+    function lazyLoadThumb(e,alt){var t='<img data-lazy-src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360"><noscript><img src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360"></noscript>',a='<button class="play" aria-label="play Youtube video"></button>';t=t.replace('alt=""','alt="'+alt+'"');return t.replace("ID",e)+a}function lazyLoadYoutubeIframe(){var e=document.createElement("iframe"),t="ID?autoplay=1";t+=0===this.parentNode.dataset.query.length?'':'&'+this.parentNode.dataset.query;e.setAttribute("src",t.replace("ID",this.parentNode.dataset.src)),e.setAttribute("frameborder","0"),e.setAttribute("allowfullscreen","1"),e.setAttribute("allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"),this.parentNode.parentNode.replaceChild(e,this.parentNode)}document.addEventListener("DOMContentLoaded",function(){var e,t,p,a=document.getElementsByClassName("rll-youtube-player");for(t=0;t<a.length;t++)e=document.createElement("div"),e.setAttribute("data-id",a[t].dataset.id),e.setAttribute("data-query", a[t].dataset.query),e.setAttribute("data-src", a[t].dataset.src),e.innerHTML=lazyLoadThumb(a[t].dataset.id,a[t].dataset.alt),a[t].appendChild(e),p=e.querySelector('.play'),p.onclick=lazyLoadYoutubeIframe});
+    </script> 
+    <script>
+    class RocketElementorAnimation{constructor(){this.deviceMode=document.createElement("span"),this.deviceMode.id="elementor-device-mode-wpr",this.deviceMode.setAttribute("class","elementor-screen-only"),document.body.appendChild(this.deviceMode)}_detectAnimations(){let t=getComputedStyle(this.deviceMode,":after").content.replace(/"/g,"");this.animationSettingKeys=this._listAnimationSettingsKeys(t),document.querySelectorAll(".elementor-invisible[data-settings]").forEach(t=>{const e=t.getBoundingClientRect();if(e.bottom>=0&&e.top<=window.innerHeight)try{this._animateElement(t)}catch(t){}})}_animateElement(t){const e=JSON.parse(t.dataset.settings),i=e._animation_delay||e.animation_delay||0,n=e[this.animationSettingKeys.find(t=>e[t])];if("none"===n)return void t.classList.remove("elementor-invisible");t.classList.remove(n),this.currentAnimation&&t.classList.remove(this.currentAnimation),this.currentAnimation=n;let s=setTimeout(()=>{t.classList.remove("elementor-invisible"),t.classList.add("animated",n),this._removeAnimationSettings(t,e)},i);window.addEventListener("rocket-startLoading",function(){clearTimeout(s)})}_listAnimationSettingsKeys(t="mobile"){const e=[""];switch(t){case"mobile":e.unshift("_mobile");case"tablet":e.unshift("_tablet");case"desktop":e.unshift("_desktop")}const i=[];return["animation","_animation"].forEach(t=>{e.forEach(e=>{i.push(t+e)})}),i}_removeAnimationSettings(t,e){this._listAnimationSettingsKeys().forEach(t=>delete e[t]),t.dataset.settings=JSON.stringify(e)}static run(){const t=new RocketElementorAnimation;requestAnimationFrame(t._detectAnimations.bind(t))}}document.addEventListener("DOMContentLoaded",RocketElementorAnimation.run);
+    </script> <span id="elementor-device-mode-wpr" class="elementor-screen-only"></span><span id="elementor-device-mode-wpr" class="elementor-screen-only"></span><span id="elementor-device-mode" class="elementor-screen-only"></span><svg style="display: none;" class="e-font-icon-svg-symbols"></svg>
+  </body>
+</html>
